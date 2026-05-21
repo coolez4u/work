@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next-Gen Infra | Web Presentation</title>
+    <title>Next-Gen Infra | Horizontal Presentation</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* 1. PPT 슬라이드 엔진 설정 */
+        /* 1. 가로형 PPT 엔진 및 스냅 세팅 */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -25,43 +25,45 @@
             --accent-violet: #8B5CF6;
             --text-main: #F8FAFC;
             --text-dim: #94A3B8;
+            --grid-line: rgba(148, 163, 184, 0.1);
+            --tile-bg: rgba(30, 41, 59, 0.7);
         }
 
         html,
         body {
             height: 100%;
             overflow: hidden;
-            /* 기본 스크롤 숨김 */
             background-color: var(--bg-color);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
         }
 
-        /* 슬라이드 감싸는 컨테이너 */
+        /* 가로 스크롤을 위한 컨테이너 */
         .presentation-wrapper {
+            display: flex;
+            width: 100vw;
             height: 100vh;
-            overflow-y: auto;
-            scroll-snap-type: y mandatory;
-            /* 수직 스냅 기능 */
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            /* 가로 방향 스냅 */
             scroll-behavior: smooth;
         }
 
-        /* 개별 슬라이드 (한 화면 꽉 차게) */
+        /* 개별 슬라이드 (가로 매칭) */
         .slide {
+            flex: 0 0 100vw;
             height: 100vh;
-            width: 100vw;
             scroll-snap-align: start;
-            /* 화면 시작점에 딱 붙음 */
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 80px;
+            padding: 80px 100px;
             overflow: hidden;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* 배경 그리드 디자인 */
+        /* 격자 배경 */
         .slide::before {
             content: '';
             position: absolute;
@@ -69,32 +71,43 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
-            background-size: 40px 40px;
+            background-image:
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 60px 60px;
             z-index: -1;
+            opacity: 0.5;
         }
 
-        /* 2. 공통 디자인 요소 */
-        .slide-title {
+        /* 타이틀 스타일 */
+        h1,
+        h2,
+        h3 {
             font-family: 'Poppins', sans-serif;
-            font-size: 56px;
+        }
+
+        .slide-title {
+            font-size: 48px;
             font-weight: 700;
             margin-bottom: 40px;
-            line-height: 1.1;
+            text-transform: uppercase;
+            border-left: 6px solid var(--accent-teal);
+            padding-left: 25px;
         }
 
         .slide-title span {
             color: var(--accent-teal);
         }
 
-        .content-box {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 40px;
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
         }
 
-        /* 레이아웃: 그리드 */
+        /* 레이아웃 모듈 */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -102,35 +115,164 @@
             align-items: center;
         }
 
-        /* 3. 차트 슬라이드 전용 */
-        .chart-wrapper {
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .tile {
+            background: var(--tile-bg);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--grid-line);
+        }
+
+        .tile .icon {
+            font-size: 45px;
+            color: var(--accent-teal);
+            margin-bottom: 20px;
+        }
+
+        .tile h3 {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .tile p {
+            font-size: 18px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* 지표강조 */
+        .highlight-numbers {
+            display: flex;
+            justify-content: space-around;
             width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            height: 400px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric .number {
+            font-family: 'Space Mono', monospace;
+            font-size: 90px;
+            font-weight: 700;
+            color: var(--accent-teal);
+            line-height: 1;
+        }
+
+        .metric .label {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            margin-top: 15px;
+        }
+
+        /* 테이블 */
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th,
+        .table-layout td {
+            padding: 22px;
+            text-align: left;
+            border-bottom: 1px solid var(--grid-line);
+            font-size: 18px;
+        }
+
+        .table-layout th {
+            color: var(--accent-teal);
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+
+        /* 타임라인 */
+        .timeline-layout {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding-top: 40px;
+        }
+
+        .timeline-layout::before {
+            content: '';
+            position: absolute;
+            top: 52px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--grid-line);
+        }
+
+        .timeline-item {
+            width: 22%;
             position: relative;
         }
 
-        /* 버튼 및 장식 */
-        .accent-bar {
-            width: 80px;
-            height: 6px;
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
             background: var(--accent-teal);
+            border-radius: 50%;
+            margin-bottom: 25px;
+            border: 4px solid var(--bg-color);
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-item h3 {
+            color: var(--accent-teal);
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        /* 차트 공간 박스 */
+        .chart-container {
+            width: 100%;
+            max-width: 900px;
+            height: 380px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* 인용구 */
+        .quote-layout {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quote-layout blockquote {
+            font-size: 38px;
+            font-style: italic;
+            line-height: 1.5;
             margin-bottom: 30px;
         }
 
-        /* 하단 푸터 */
+        .quote-layout cite {
+            font-size: 22px;
+            color: var(--accent-violet);
+            font-weight: 600;
+        }
+
+        /* 푸터 정보 */
         .slide-footer {
             position: absolute;
-            bottom: 40px;
-            left: 80px;
-            right: 80px;
+            bottom: 35px;
+            left: 100px;
+            right: 100px;
             display: flex;
             justify-content: space-between;
+            font-family: 'Space Mono';
             font-size: 14px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            color: rgba(148, 163, 184, 0.3);
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -139,145 +281,340 @@
 
     <div class="presentation-wrapper" id="slider">
 
-        <section class="slide" id="slide1">
-            <div class="accent-bar"></div>
-            <h1 class="slide-title" style="font-size: 100px;">STRATEGIC<br><span>INFRASTRUCTURE</span></h1>
-            <p style="font-size: 28px; color: var(--text-dim);">The Next Frontier of Digital Connectivity & AI Core</p>
-            <div class="slide-footer">
-                <span>McKinsey Style Template</span>
-                <span>2026 Strategy</span>
-            </div>
+        <section class="slide">
+            <div style="width: 80px; height: 6px; background: var(--accent-teal); margin-bottom: 30px;"></div>
+            <h1 style="font-size: 84px; line-height: 1.1; font-weight: 700;">FUTURE
+                <span>DIGITAL</span><br>INFRASTRUCTURE</h1>
+            <p style="font-size: 26px; color: var(--text-dim); margin-top: 20px;">Next-Generation Connectivity and AI
+                Systems</p>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 01</span></div>
         </section>
 
         <section class="slide" style="text-align: center;">
-            <p style="color: var(--accent-teal); font-weight: 700; letter-spacing: 5px; margin-bottom: 20px;">PHASE 01
+            <p style="color: var(--accent-teal); letter-spacing: 5px; font-weight: 700; margin-bottom: 15px;">SECTION 01
             </p>
-            <h1 class="slide-title">MARKET<br>INTELLIGENCE</h1>
-            <div style="width: 150px; height: 2px; background: var(--accent-violet); margin: 0 auto;"></div>
+            <h1 style="font-size: 75px; font-weight: 700;">EXECUTIVE VISION</h1>
+            <div style="width: 120px; height: 4px; background: var(--accent-violet); margin: 30px auto 0;"></div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 02</span></div>
         </section>
 
         <section class="slide">
-            <h2 class="slide-title">Core Value <span>Pillars</span></h2>
-            <div class="grid-2" style="grid-template-columns: repeat(3, 1fr);">
-                <div class="content-box">
-                    <i class="fa-solid fa-bolt"
-                        style="font-size: 40px; color: var(--accent-teal); margin-bottom: 20px;"></i>
-                    <h3>Hyper-Speed</h3>
-                    <p style="color: var(--text-dim);">Zero-latency routing optimized by quantum algorithms.</p>
-                </div>
-                <div class="content-box">
-                    <i class="fa-solid fa-lock"
-                        style="font-size: 40px; color: var(--accent-violet); margin-bottom: 20px;"></i>
-                    <h3>Solid Security</h3>
-                    <p style="color: var(--text-dim);">Zero-trust architecture with decentralized verification.</p>
-                </div>
-                <div class="content-box">
-                    <i class="fa-solid fa-leaf" style="font-size: 40px; color: #4ADE80; margin-bottom: 20px;"></i>
-                    <h3>Eco-System</h3>
-                    <p style="color: var(--text-dim);">Sustainable energy-efficient green data centers.</p>
+            <h2 class="slide-title">STRATEGIC <span>PILLARS</span></h2>
+            <div class="content-area">
+                <div class="grid-3">
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-expand"></i></div>
+                        <h3>SCALABILITY</h3>
+                        <p>Modular cloud architecture designed for hyper-growth and dynamic workload distribution.</p>
+                    </div>
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h3>SECURITY</h3>
+                        <p>Zero-trust protocol integration protecting over 100M+ global endpoints in real-time.</p>
+                    </div>
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-leaf"></i></div>
+                        <h3>SUSTAINABILITY</h3>
+                        <p>Green-compute algorithms reducing energy consumption by 40% across data centers.</p>
+                    </div>
                 </div>
             </div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 03</span></div>
         </section>
 
         <section class="slide">
-            <h2 class="slide-title">Market <span>Expansion</span></h2>
-            <div class="chart-wrapper">
-                <canvas id="barChart"></canvas>
+            <h2 class="slide-title">ADVANCED <span>AI CORE</span></h2>
+            <div class="content-area">
+                <div class="grid-2">
+                    <div>
+                        <h3 style="color: var(--accent-teal); margin-bottom: 20px; font-size: 28px;">Cognitive Routing
+                            Engine</h3>
+                        <p style="font-size: 20px; color: var(--text-dim); line-height: 1.6;">Our proprietary AI engine
+                            processes 10TB+ of data per second to optimize network routing. By predicting traffic surges
+                            before they happen, we maintain zero-latency environments.</p>
+                    </div>
+                    <div class="tile"
+                        style="display: flex; justify-content: center; align-items: center; height: 320px; background: rgba(30,41,59,0.3);">
+                        <i class="fa-solid fa-microchip" style="font-size: 130px; color: var(--accent-teal);"></i>
+                    </div>
+                </div>
             </div>
-            <p style="text-align: center; margin-top: 30px; color: var(--text-dim);">Forecasted Growth in Enterprise
-                Adoption (2024-2026)</p>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 04</span></div>
         </section>
 
         <section class="slide">
-            <h2 class="slide-title">Revenue <span>Trajectory</span></h2>
-            <div class="chart-wrapper">
-                <canvas id="lineChart"></canvas>
+            <h2 class="slide-title">GLOBAL <span>PERFORMANCE</span></h2>
+            <div class="content-area">
+                <div class="highlight-numbers">
+                    <div class="metric">
+                        <div class="number">99.99<span style="font-size: 40px;">%</span></div>
+                        <div class="label">UPTIME SERVICE LEVEL</div>
+                    </div>
+                    <div class="metric">
+                        <div class="number">250<span style="font-size: 40px;">+</span></div>
+                        <div class="label">GLOBAL DATA NODES</div>
+                    </div>
+                    <div class="metric">
+                        <div class="number">40<span style="font-size: 40px;">%</span></div>
+                        <div class="label">OPEX REDUCTION</div>
+                    </div>
+                </div>
             </div>
-            <p style="text-align: center; margin-top: 30px; color: var(--text-dim);">Quarterly Revenue Projections
-                (Unit: $M)</p>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 05</span></div>
+        </section>
+
+        <section class="slide">
+            <h2 class="slide-title">MARKET <span>POSITIONING</span></h2>
+            <div class="content-area">
+                <div class="grid-2">
+                    <div class="tile"
+                        style="background: rgba(239, 68, 68, 0.03); border-color: rgba(239, 68, 68, 0.2);">
+                        <h3 style="color: #f87171;"><i class="fa-solid fa-triangle-exclamation"></i> Legacy Limitations
+                        </h3>
+                        <p style="color: #cbd5e1; margin-top: 15px; font-size: 18px; line-height: 1.8;">
+                            • Rigid hardware dependencies<br>
+                            • High latency in cross-border routing<br>
+                            • Fragmented security patches
+                        </p>
+                    </div>
+                    <div class="tile"
+                        style="background: rgba(45, 212, 191, 0.03); border-color: rgba(45, 212, 191, 0.2);">
+                        <h3 style="color: var(--accent-teal);"><i class="fa-solid fa-rocket"></i> Our Advantages</h3>
+                        <p style="color: #cbd5e1; margin-top: 15px; font-size: 18px; line-height: 1.8;">
+                            • Software-defined infrastructure<br>
+                            • AI-predicted dynamic load balancing<br>
+                            • Integrated Zero-Trust architecture
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 06</span></div>
+        </section>
+
+        <section class="slide">
+            <h2 class="slide-title">CAPABILITY <span>MATRIX</span></h2>
+            <div class="content-area">
+                <div class="table-layout">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Capabilities</th>
+                                <th>Legacy Providers</th>
+                                <th>Digital First Niche</th>
+                                <th style="color: var(--accent-teal);">Our Platform</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>AI Optimization</td>
+                                <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i> Negligible</td>
+                                <td><i class="fa-solid fa-circle-check" style="color: var(--accent-violet);"></i>
+                                    Partial</td>
+                                <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i> Full
+                                    Core</td>
+                            </tr>
+                            <tr>
+                                <td>Global Edge Network</td>
+                                <td><i class="fa-solid fa-circle-check" style="color: #64748b;"></i> Broad</td>
+                                <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i> Limited</td>
+                                <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i> Next-Gen
+                                    Distributed</td>
+                            </tr>
+                            <tr>
+                                <td>Green Computing</td>
+                                <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i> High-Carbon</td>
+                                <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i> Unoptimized</td>
+                                <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i> 100%
+                                    Eco-Matched</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 07</span></div>
+        </section>
+
+        <section class="slide" id="slide-bar-chart">
+            <h2 class="slide-title">MARKET SHARE <span>GROWTH</span></h2>
+            <div class="content-area">
+                <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 08</span></div>
+        </section>
+
+        <section class="slide" id="slide-line-chart">
+            <h2 class="slide-title">REVENUE <span>PROJECTIONS</span></h2>
+            <div class="content-area">
+                <div class="chart-container">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 09</span></div>
+        </section>
+
+        <section class="slide">
+            <h2 class="slide-title">IMPLEMENTATION <span>ROADMAP</span></h2>
+            <div class="content-area">
+                <div class="timeline-layout">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3>Q1 - RESEARCH</h3>
+                        <p style="font-size: 15px; color: var(--text-dim);">Core R&D on next-gen encryption protocols.
+                        </p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3>Q2 - BETA</h3>
+                        <p style="font-size: 15px; color: var(--text-dim);">Pilot program with top 50 Fortune 500
+                            clients.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--accent-violet);"></div>
+                        <h3>Q3 - SCALE</h3>
+                        <p style="font-size: 15px; color: var(--text-dim);">Rapid deployment across 12 global regions.
+                        </p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3>Q4 - GLOBAL</h3>
+                        <p style="font-size: 15px; color: var(--text-dim);">Full network maturity and ecosystem
+                            dominance.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 10</span></div>
+        </section>
+
+        <section class="slide">
+            <div class="content-area" style="text-align: center;">
+                <div class="quote-layout">
+                    <blockquote style="color: #cbd5e1;">"Technology is the lever that moves the world. Our mission is to
+                        build the most robust lever ever created."</blockquote>
+                    <cite>— DR. ELENA VANCE, CTO</cite>
+                </div>
+            </div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 11</span></div>
         </section>
 
         <section class="slide" style="text-align: center;">
-            <h2 class="slide-title">Any <span>Questions?</span></h2>
-            <p style="font-size: 24px; color: var(--text-dim);">Thank you for your attention.</p>
-            <div style="margin-top: 60px;">
-                <p><i class="fa-solid fa-envelope"></i> contact@futureinfra.dev</p>
-                <p><i class="fa-solid fa-globe"></i> www.futureinfra.dev</p>
+            <h1 style="font-size: 64px; color: var(--accent-teal); font-weight: 700; margin-bottom: 20px;">ANY
+                QUESTIONS?</h1>
+            <p style="font-size: 22px; color: var(--text-dim);">Thank you for your time and consideration.</p>
+            <div style="margin-top: 50px; font-size: 18px; color: var(--text-dim); line-height: 2;">
+                <p><i class="fa-solid fa-globe" style="color: var(--accent-teal);"></i> futureinfra.com</p>
+                <p><i class="fa-solid fa-envelope" style="color: var(--accent-teal);"></i> contact@futureinfra.com</p>
             </div>
+            <div class="slide-footer"><span>STRATEGY 2026 // CONFIDENTIAL</span><span>SLIDE 12</span></div>
         </section>
 
     </div>
 
     <script>
-        // --- Chart.js 초기화 ---
+        // --- 글로벌 차트 인스턴스 보관함 ---
+        let barChartInstance = null;
+        let lineChartInstance = null;
 
-        // 1. 막대 차트 (Bar Chart)
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: ['2024 Actual', '2025 Forecast', '2026 Target'],
-                datasets: [{
-                    label: 'Market Share (%)',
-                    data: [15, 32, 58],
-                    backgroundColor: ['#8B5CF6', '#2DD4BF', '#F8FAFC'],
-                    borderRadius: 10,
-                    barThickness: 60
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
+        // --- 1. 바 차트 애니메이션 빌드 함수 ---
+        function initBarChart() {
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            if (barChartInstance) barChartInstance.destroy(); // 초기화 리셋 효과
+
+            barChartInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['2024 ACTUAL', '2025 FORECAST', '2026 TARGET'],
+                    datasets: [{
+                        label: 'Market Share (%)',
+                        data: [15, 22, 35],
+                        backgroundColor: ['#8B5CF6', '#2DD4BF', '#F8FAFC'],
+                        borderRadius: 8,
+                        barThickness: 50
+                    }]
                 },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } },
-                    x: { grid: { display: false }, ticks: { color: '#F8FAFC', font: { size: 16 } } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 1500, easing: 'easeOutQuart' }, // 스르륵 차오르는 효과
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8', font: { size: 14 } } },
+                        x: { grid: { display: false }, ticks: { color: '#F8FAFC', font: { size: 15, weight: '600' } } }
+                    }
                 }
+            });
+        }
+
+        // --- 2. 선 차트 애니메이션 빌드 함수 ---
+        function initLineChart() {
+            const ctxLine = document.getElementById('lineChart').getContext('2d');
+            if (lineChartInstance) lineChartInstance.destroy();
+
+            const gradient = ctxLine.createLinearGradient(0, 0, 0, 350);
+            gradient.addColorStop(0, 'rgba(45, 212, 191, 0.4)');
+            gradient.addColorStop(1, 'rgba(45, 212, 191, 0)');
+
+            lineChartInstance = new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: ['2023', '2024', '2025', '2026', '2027'],
+                    datasets: [{
+                        data: [50, 120, 200, 320, 450],
+                        borderColor: '#2DD4BF',
+                        borderWidth: 4,
+                        fill: true,
+                        backgroundColor: gradient,
+                        tension: 0.3,
+                        pointBackgroundColor: '#8B5CF6',
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 1800, easing: 'easeOutExpo' }, // 드로잉 선 애니메이션
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } },
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8', font: { size: 14 } } }
+                    }
+                }
+            });
+        }
+
+        // --- 3. 슬라이드가 바뀔 때 차트 애니메이션 트리거 작동 엔진 ---
+        const wrapper = document.getElementById('slider');
+        let activeSlideIndex = 0;
+
+        wrapper.addEventListener('scroll', () => {
+            // 현재 몇 번째 가로 슬라이드가 화면에 완전히 들어왔는지 계산
+            const index = Math.round(wrapper.scrollLeft / window.innerWidth);
+            if (index !== activeSlideIndex) {
+                activeSlideIndex = index;
+
+                // 8번째 슬라이드(index 7) 도달 시 막대 차트 애니메이션 재생
+                if (activeSlideIndex === 7) initBarChart();
+                // 9번째 슬라이드(index 8) 도달 시 선 차트 애니메이션 재생
+                if (activeSlideIndex === 8) initLineChart();
             }
         });
 
-        // 2. 선 차트 (Line Chart)
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        const gradient = ctxLine.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(45, 212, 191, 0.4)');
-        gradient.addColorStop(1, 'rgba(45, 212, 191, 0)');
-
-        new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: ['Q1', 'Q2', 'Q3', 'Q4', 'Q1', 'Q2'],
-                datasets: [{
-                    label: 'Revenue',
-                    data: [120, 190, 170, 250, 310, 450],
-                    borderColor: '#2DD4BF',
-                    borderWidth: 4,
-                    fill: true,
-                    backgroundColor: gradient,
-                    tension: 0.4, // 곡선 부드러움
-                    pointBackgroundColor: '#F8FAFC'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } },
-                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } }
-                }
-            }
+        // 처음 로드될 때 첫 슬라이드 매칭용 기본 트리거 세팅
+        window.addEventListener('load', () => {
+            initBarChart();
+            initLineChart();
         });
 
-        // --- 키보드 내비게이션 기능 ---
+        // --- 4. 키보드 내비게이션 엔진 (완벽한 가로 이동) ---
         window.addEventListener('keydown', (e) => {
-            const slider = document.getElementById('slider');
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                slider.scrollBy(0, window.innerHeight);
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                wrapper.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
             }
-            if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                slider.scrollBy(0, -window.innerHeight);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                wrapper.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
             }
         });
     </script>
