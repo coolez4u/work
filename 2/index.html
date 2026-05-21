@@ -1,393 +1,622 @@
-:root {
---bg-color: #0F172A;
---primary-text: #F8FAFC;
---secondary-text: #94A3B8;
---accent-teal: #2DD4BF;
---accent-violet: #8B5CF6;
---grid-line: rgba(148, 163, 184, 0.1);
---tile-bg: rgba(30, 41, 59, 0.7);
-}
+<!DOCTYPE html>
+<html lang="en">
 
-body {
-background-color: #1e293b;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 40px;
-padding: 40px 0;
-color: var(--primary-text);
-font-family: 'Inter', sans-serif;
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Infrastructure | HTML Slides</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-.slide-container {
-width: 1280px;
-height: 720px;
-background-color: var(--bg-color);
-position: relative;
-overflow: hidden;
-display: flex;
-flex-direction: column;
-padding: 60px 80px;
-box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-border: 1px solid rgba(255,255,255,0.05);
-}
+        :root {
+            --bg-color: #0F172A;
+            --primary-text: #F8FAFC;
+            --secondary-text: #94A3B8;
+            --accent-teal: #2DD4BF;
+            --accent-violet: #8B5CF6;
+            --grid-line: rgba(148, 163, 184, 0.1);
+            --tile-bg: rgba(30, 41, 59, 0.7);
+        }
 
-.slide-container::before {
-content: '';
-position: absolute;
-top: 0; left: 0; width: 100%; height: 100%;
-background-image:
-linear-gradient(var(--grid-line) 1px, transparent 1px),
-linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-background-size: 60px 60px;
-z-index: 0;
-pointer-events: none;
-}
+        body {
+            background-color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            padding: 40px 0;
+            color: var(--primary-text);
+            font-family: 'Inter', sans-serif;
+        }
 
-.slide-container::after {
-content: '';
-position: absolute;
-bottom: -100px; right: -100px;
-width: 500px; height: 500px;
-background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
-z-index: 0;
-}
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: var(--bg-color);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 60px 80px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-.slide-container > * { position: relative; z-index: 1; }
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-h1, h2, h3 { font-family: 'Poppins', sans-serif; color: var(--primary-text); }
+        .slide-container::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
 
-.slide-title {
-font-size: 44px;
-font-weight: 700;
-margin-bottom: 40px;
-text-transform: uppercase;
-letter-spacing: -0.5px;
-border-left: 6px solid var(--accent-teal);
-padding-left: 25px;
-max-width: 1000px;
-}
+        .slide-container>* {
+            position: relative;
+            z-index: 1;
+        }
 
-.content-area {
-flex-grow: 1;
-display: flex;
-flex-direction: column;
-justify-content: center;
-width: 100%;
-}
+        h1,
+        h2,
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-text);
+        }
 
-p { font-size: 22px; line-height: 1.6; color: var(--secondary-text); }
+        .slide-title {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            border-left: 6px solid var(--accent-teal);
+            padding-left: 25px;
+            max-width: 1000px;
+        }
 
-.title-layout { text-align: center; justify-content: center; height: 100%; display: flex; flex-direction: column; }
-.title-layout h1 { font-size: 80px; line-height: 1.1; margin-bottom: 20px; color: var(--primary-text); }
-.title-layout h1 span { color: var(--accent-teal); }
-.title-layout .subtitle { font-size: 28px; color: var(--accent-violet); font-weight: 500; }
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+        }
 
-.tiled-content { display: flex; gap: 30px; width: 100%; }
-.tile { flex: 1; background: var(--tile-bg); padding: 40px; border-radius: 16px; border: 1px solid var(--grid-line);
-transition: border-color 0.3s; }
-.tile:hover { border-color: var(--accent-teal); }
-.tile .icon { font-size: 50px; color: var(--accent-teal); margin-bottom: 20px; }
-.tile h3 { font-size: 28px; margin-bottom: 15px; }
+        p {
+            font-size: 22px;
+            line-height: 1.6;
+            color: var(--secondary-text);
+        }
 
-.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; width: 100%; }
-.image-wrapper { border-radius: 20px; overflow: hidden; border: 1px solid var(--grid-line); height: 400px; background:
-#1e293b; display: flex; align-items: center; justify-content: center; font-size: 50px; color: var(--accent-teal); }
+        .title-layout {
+            text-align: center;
+            justify-content: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-.highlight-numbers { display: flex; justify-content: space-around; width: 100%; }
-.metric { text-align: center; }
-.metric .number { font-family: 'Space Mono', monospace; font-size: 90px; font-weight: 700; color: var(--accent-teal);
-line-height: 1; }
-.metric .label { font-size: 20px; text-transform: uppercase; letter-spacing: 2px; color: var(--secondary-text);
-margin-top: 10px; }
+        .title-layout h1 {
+            font-size: 80px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--primary-text);
+        }
 
-.table-layout table { width: 100%; border-collapse: collapse; }
-.table-layout th, .table-layout td { padding: 25px; text-align: left; border-bottom: 1px solid var(--grid-line);
-font-size: 20px; }
-.table-layout th { color: var(--accent-teal); text-transform: uppercase; font-size: 16px; }
-.table-layout tr:hover { background: rgba(255,255,255,0.02); }
+        .title-layout h1 span {
+            color: var(--accent-teal);
+        }
 
-.chart-container { width: 100%; height: 100%; display: flex; flex-direction: column; gap: 30px; }
-.bar-chart { display: flex; flex-direction: column; gap: 20px; }
-.bar { display: flex; align-items: center; gap: 20px; }
-.bar-label { flex: 0 0 150px; text-align: right; font-weight: 600; }
-.bar-bg { flex-grow: 1; height: 30px; background: var(--grid-line); border-radius: 15px; overflow: hidden; }
-.bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-violet), var(--accent-teal)); border-radius:
-15px; }
+        .title-layout .subtitle {
+            font-size: 28px;
+            color: var(--accent-violet);
+            font-weight: 500;
+        }
 
-.timeline-layout { display: flex; justify-content: space-between; position: relative; padding-top: 40px; }
-.timeline-layout::before { content: ''; position: absolute; top: 52px; left: 0; width: 100%; height: 2px; background:
-var(--grid-line); }
-.timeline-item { width: 22%; position: relative; }
-.timeline-dot { width: 24px; height: 24px; background: var(--accent-teal); border-radius: 50%; margin-bottom: 30px;
-border: 4px solid var(--bg-color); position: relative; z-index: 2; }
-.timeline-item h3 { color: var(--accent-teal); margin-bottom: 10px; }
+        .tiled-content {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+        }
 
-.quote-layout { text-align: center; max-width: 900px; margin: 0 auto; }
-.quote-layout blockquote { font-size: 42px; font-style: italic; line-height: 1.4; margin-bottom: 30px; position:
-relative; }
-.quote-layout blockquote::before { content: '"'; font-size: 120px; color: var(--grid-line); position: absolute; left:
--60px; top: -40px; }
-.quote-layout cite { font-size: 24px; color: var(--accent-violet); font-weight: 600; }
+        .tile {
+            flex: 1;
+            background: var(--tile-bg);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--grid-line);
+            transition: border-color 0.3s;
+        }
 
-.slide-footer { position: absolute; bottom: 30px; left: 80px; font-family: 'Space Mono'; font-size: 14px; color:
-var(--grid-line); letter-spacing: 1px; }
-</style>
+        .tile:hover {
+            border-color: var(--accent-teal);
+        }
 
-```
+        .tile .icon {
+            font-size: 50px;
+            color: var(--accent-teal);
+            margin-bottom: 20px;
+        }
 
-```
-<div class="slide-container" id="slide1">
-    <div class="title-layout">
-        <h1>FUTURE <span>DIGITAL</span><br>INFRASTRUCTURE</h1>
-        <p class="subtitle">Next-Generation Connectivity and AI Systems</p>
-    </div>
-    <div class="slide-footer">STRATEGY 2026 // CONFIDENTIAL</div>
-</div>
+        .tile h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
 
-<div class="slide-container" id="slide2">
-    <div class="title-layout">
-        <p style="color: var(--accent-teal); letter-spacing: 5px; font-weight: 700; margin-bottom: 10px;">SECTION 01</p>
-        <h1 style="font-size: 70px;">EXECUTIVE<br>VISION</h1>
-        <div style="width: 100px; height: 4px; background: var(--accent-violet); margin: 30px auto;"></div>
-    </div>
-</div>
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+        }
 
-<div class="slide-container" id="slide3">
-    <h2 class="slide-title">STRATEGIC PILLARS</h2>
-    <div class="content-area">
-        <div class="tiled-content">
-            <div class="tile">
-                <div class="icon"><i class="fa-solid fa-expand"></i></div>
-                <h3>SCALABILITY</h3>
-                <p>Modular cloud architecture designed for hyper-growth and dynamic workload distribution.</p>
-            </div>
-            <div class="tile">
-                <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
-                <h3>SECURITY</h3>
-                <p>Zero-trust protocol integration protecting over 100M+ global endpoints in real-time.</p>
-            </div>
-            <div class="tile">
-                <div class="icon"><i class="fa-solid fa-leaf"></i></div>
-                <h3>SUSTAINABILITY</h3>
-                <p>Green-compute algorithms reducing energy consumption by 40% across data centers.</p>
-            </div>
+        .image-wrapper {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--grid-line);
+            height: 400px;
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            color: var(--accent-teal);
+        }
+
+        .highlight-numbers {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric .number {
+            font-family: 'Space Mono', monospace;
+            font-size: 90px;
+            font-weight: 700;
+            color: var(--accent-teal);
+            line-height: 1;
+        }
+
+        .metric .label {
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--secondary-text);
+            margin-top: 10px;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th,
+        .table-layout td {
+            padding: 25px;
+            text-align: left;
+            border-bottom: 1px solid var(--grid-line);
+            font-size: 20px;
+        }
+
+        .table-layout th {
+            color: var(--accent-teal);
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+
+        .table-layout tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bar-label {
+            flex: 0 0 150px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .bar-bg {
+            flex-grow: 1;
+            height: 30px;
+            background: var(--grid-line);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-violet), var(--accent-teal));
+            border-radius: 15px;
+        }
+
+        .timeline-layout {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding-top: 40px;
+        }
+
+        .timeline-layout::before {
+            content: '';
+            position: absolute;
+            top: 52px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--grid-line);
+        }
+
+        .timeline-item {
+            width: 22%;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-teal);
+            border-radius: 50%;
+            margin-bottom: 30px;
+            border: 4px solid var(--bg-color);
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-item h3 {
+            color: var(--accent-teal);
+            margin-bottom: 10px;
+        }
+
+        .quote-layout {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quote-layout blockquote {
+            font-size: 42px;
+            font-style: italic;
+            line-height: 1.4;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .quote-layout blockquote::before {
+            content: '"';
+            font-size: 120px;
+            color: var(--grid-line);
+            position: absolute;
+            left: -60px;
+            top: -40px;
+        }
+
+        .quote-layout cite {
+            font-size: 24px;
+            color: var(--accent-violet);
+            font-weight: 600;
+        }
+
+        .slide-footer {
+            position: absolute;
+            bottom: 30px;
+            left: 80px;
+            font-family: 'Space Mono';
+            font-size: 14px;
+            color: var(--grid-line);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="slide-container" id="slide1">
+        <div class="title-layout">
+            <h1>FUTURE <span>DIGITAL</span><br>INFRASTRUCTURE</h1>
+            <p class="subtitle">Next-Generation Connectivity and AI Systems</p>
         </div>
+        <div class="slide-footer">STRATEGY 2026 // CONFIDENTIAL</div>
     </div>
-</div>
 
-<div class="slide-container" id="slide4">
-    <h2 class="slide-title">ADVANCED AI CORE</h2>
-    <div class="content-area">
-        <div class="two-column">
-            <div>
-                <h3 style="color: var(--accent-teal); margin-bottom: 20px;">Cognitive Routing Engine</h3>
-                <p>Our proprietary AI engine processes 10TB+ of data per second to optimize network routing. By
-                    predicting traffic surges before they happen, we maintain zero-latency environments for enterprise
-                    clients.</p>
-                <ul style="margin-top: 30px; list-style: none;">
-                    <li style="margin-bottom: 15px; font-size: 18px; color: var(--primary-text);"><i
-                            class="fa-solid fa-check-circle" style="color: var(--accent-teal); margin-right: 10px;"></i>
-                        Neural Edge Processing</li>
-                    <li style="margin-bottom: 15px; font-size: 18px; color: var(--primary-text);"><i
-                            class="fa-solid fa-check-circle" style="color: var(--accent-teal); margin-right: 10px;"></i>
-                        Quantum-Safe Encryption</li>
-                </ul>
-            </div>
-            <div class="image-wrapper">
-                <i class="fa-solid fa-microchip"></i>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide5">
-    <h2 class="slide-title">GLOBAL PERFORMANCE METRICS</h2>
-    <div class="content-area">
-        <div class="highlight-numbers">
-            <div class="metric">
-                <div class="number">99.99<span style="font-size: 40px;">%</span></div>
-                <div class="label">UPTIME SERVICE LEVEL</div>
-            </div>
-            <div class="metric">
-                <div class="number">250<span style="font-size: 40px;">+</span></div>
-                <div class="label">GLOBAL DATA NODES</div>
-            </div>
-            <div class="metric">
-                <div class="number">40<span style="font-size: 40px;">%</span></div>
-                <div class="label">OPEX REDUCTION</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide6">
-    <h2 class="slide-title">MARKET POSITIONING</h2>
-    <div class="content-area">
-        <div class="two-column" style="grid-template-columns: 1fr 1fr; gap: 40px;">
-            <div class="tile" style="background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2);">
-                <h3 style="color: #f87171;">Incumbent Limitations</h3>
-                <p style="color: #cbd5e1;">- Rigid legacy hardware dependencies<br>- High latency in cross-border
-                    routing<br>- Fragmented security patches</p>
-            </div>
-            <div class="tile" style="background: rgba(45, 212, 191, 0.05); border-color: rgba(45, 212, 191, 0.2);">
-                <h3 style="color: var(--accent-teal);">Disruptive Advantages</h3>
-                <p style="color: #cbd5e1;">- Software-defined infrastructure<br>- AI-predicted load balancing<br>-
-                    Integrated Zero-Trust architecture</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide7">
-    <h2 class="slide-title">CAPABILITY MATRIX</h2>
-    <div class="content-area">
-        <div class="table-layout">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Capabilities</th>
-                        <th>Legacy Providers</th>
-                        <th>Digital First Niche</th>
-                        <th style="color: var(--accent-teal);">Our Platform</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>AI Optimization</td>
-                        <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i></td>
-                        <td><i class="fa-solid fa-circle-check" style="color: var(--accent-violet);"></i></td>
-                        <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i></td>
-                    </tr>
-                    <tr>
-                        <td>Global Edge Network</td>
-                        <td><i class="fa-solid fa-circle-check" style="color: #64748b;"></i></td>
-                        <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i></td>
-                        <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i></td>
-                    </tr>
-                    <tr>
-                        <td>Green Computing</td>
-                        <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i></td>
-                        <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i></td>
-                        <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide8">
-    <h2 class="slide-title">MARKET SHARE GROWTH</h2>
-    <div class="content-area">
-        <div class="bar-chart">
-            <div class="bar">
-                <div class="bar-label">2024 (Actual)</div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width: 15%;"></div>
-                </div>
-                <div style="width: 50px;">15%</div>
-            </div>
-            <div class="bar">
-                <div class="bar-label">2025 (Forecast)</div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width: 22%;"></div>
-                </div>
-                <div style="width: 50px;">22%</div>
-            </div>
-            <div class="bar">
-                <div class="bar-label">2026 (Target)</div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width: 35%;"></div>
-                </div>
-                <div style="width: 50px;">35%</div>
-            </div>
-        </div>
-        <p style="margin-top: 40px; font-size: 18px; font-style: italic;">Note: Expansion into Southeast Asia and
-            European markets is the primary driver for 2026 growth.</p>
-    </div>
-</div>
-
-<div class="slide-container" id="slide9">
-    <h2 class="slide-title">REVENUE PROJECTIONS (USD M)</h2>
-    <div class="content-area">
-        <div style="width: 100%; height: 350px; position: relative;">
-            <svg viewBox="0 0 1000 400" style="width: 100%; height: 100%;">
-                <defs>
-                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="var(--accent-teal)" stop-opacity="0.4" />
-                        <stop offset="100%" stop-color="var(--accent-teal)" stop-opacity="0" />
-                    </linearGradient>
-                </defs>
-                <path d="M0,350 L200,320 L400,280 L600,200 L800,120 L1000,50 L1000,400 L0,400 Z"
-                    fill="url(#areaGradient)"></path>
-                <polyline points="0,350 200,320 400,280 600,200 800,120 1000,50" fill="none" stroke="var(--accent-teal)"
-                    stroke-width="4"></polyline>
-                <circle cx="200" cy="320" r="6" fill="var(--bg-color)" stroke="var(--accent-teal)" stroke-width="3">
-                </circle>
-                <circle cx="400" cy="280" r="6" fill="var(--bg-color)" stroke="var(--accent-teal)" stroke-width="3">
-                </circle>
-                <circle cx="600" cy="200" r="6" fill="var(--bg-color)" stroke="var(--accent-teal)" stroke-width="3">
-                </circle>
-                <circle cx="800" cy="120" r="6" fill="var(--bg-color)" stroke="var(--accent-teal)" stroke-width="3">
-                </circle>
-                <text x="0" y="380" fill="var(--secondary-text)" font-family="Space Mono" font-size="14">2023</text>
-                <text x="1000" y="380" fill="var(--secondary-text)" font-family="Space Mono" font-size="14"
-                    text-anchor="end">2027</text>
-            </svg>
-        </div>
-        <p style="text-align: center; color: var(--accent-violet); font-weight: 700;">ACCELERATED SCALING PHASE EXPECTED
-            IN Q3 2026</p>
-    </div>
-</div>
-
-<div class="slide-container" id="slide10">
-    <h2 class="slide-title">IMPLEMENTATION ROADMAP</h2>
-    <div class="content-area">
-        <div class="timeline-layout">
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <h3>Q1 - RESEARCH</h3>
-                <p style="font-size: 16px;">Core R&D on next-gen quantum encryption protocols.</p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <h3>Q2 - BETA</h3>
-                <p style="font-size: 16px;">Pilot program with top 50 Fortune 500 clients.</p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot" style="background: var(--accent-violet);"></div>
-                <h3>Q3 - SCALE</h3>
-                <p style="font-size: 16px;">Rapid deployment across 12 new global regions.</p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <h3>Q4 - GLOBAL</h3>
-                <p style="font-size: 16px;">Full network maturity and ecosystem dominance.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide11">
-    <div class="content-area" style="text-align: center;">
-        <div class="quote-layout">
-            <blockquote>Technology is the lever that moves the world. Our mission is to build the most robust lever ever
-                created.</blockquote>
-            <cite>— DR. ELENA VANCE, CTO</cite>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide12">
-    <div class="title-layout">
-        <h1 style="color: var(--accent-teal);">ANY QUESTIONS?</h1>
-        <p style="color: var(--primary-text);">Thank you for your time and consideration.</p>
-        <div style="margin-top: 50px;">
-            <p style="font-size: 18px; color: var(--secondary-text);"><i class="fa-solid fa-globe"></i> futureinfra.com
+    <div class="slide-container" id="slide2">
+        <div class="title-layout">
+            <p style="color: var(--accent-teal); letter-spacing: 5px; font-weight: 700; margin-bottom: 10px;">SECTION 01
             </p>
-            <p style="font-size: 18px; color: var(--secondary-text);"><i class="fa-solid fa-envelope"></i>
-                contact@futureinfra.com</p>
+            <h1 style="font-size: 70px;">EXECUTIVE<br>VISION</h1>
+            <div style="width: 100px; height: 4px; background: var(--accent-violet); margin: 30px auto;"></div>
         </div>
     </div>
-</div>
+
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">STRATEGIC PILLARS</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-expand"></i></div>
+                    <h3>SCALABILITY</h3>
+                    <p>Modular cloud architecture designed for hyper-growth and dynamic workload distribution.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>SECURITY</h3>
+                    <p>Zero-trust protocol integration protecting over 100M+ global endpoints in real-time.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-leaf"></i></div>
+                    <h3>SUSTAINABILITY</h3>
+                    <p>Green-compute algorithms reducing energy consumption by 40% across data centers.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">ADVANCED AI CORE</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3 style="color: var(--accent-teal); margin-bottom: 20px;">Cognitive Routing Engine</h3>
+                    <p>Our proprietary AI engine processes 10TB+ of data per second to optimize network routing. By
+                        predicting traffic surges before they happen, we maintain zero-latency environments for
+                        enterprise clients.</p>
+                    <ul style="margin-top: 30px; list-style: none;">
+                        <li style="margin-bottom: 15px; font-size: 18px; color: var(--primary-text);"><i
+                                class="fa-solid fa-check-circle"
+                                style="color: var(--accent-teal); margin-right: 10px;"></i> Neural Edge Processing</li>
+                        <li style="margin-bottom: 15px; font-size: 18px; color: var(--primary-text);"><i
+                                class="fa-solid fa-check-circle"
+                                style="color: var(--accent-teal); margin-right: 10px;"></i> Quantum-Safe Encryption</li>
+                    </ul>
+                </div>
+                <div class="image-wrapper">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">GLOBAL PERFORMANCE METRICS</h2>
+        <div class="content-area">
+            <div class="highlight-numbers">
+                <div class="metric">
+                    <div class="number">99.99<span style="font-size: 40px;">%</span></div>
+                    <div class="label">UPTIME SERVICE LEVEL</div>
+                </div>
+                <div class="metric">
+                    <div class="number">250<span style="font-size: 40px;">+</span></div>
+                    <div class="label">GLOBAL DATA NODES</div>
+                </div>
+                <div class="metric">
+                    <div class="number">40<span style="font-size: 40px;">%</span></div>
+                    <div class="label">OPEX REDUCTION</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">MARKET POSITIONING</h2>
+        <div class="content-area">
+            <div class="two-column" style="grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div class="tile" style="background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2);">
+                    <h3 style="color: #f87171;">Incumbent Limitations</h3>
+                    <p style="color: #cbd5e1;">- Rigid legacy hardware dependencies<br>- High latency in cross-border
+                        routing<br>- Fragmented security patches</p>
+                </div>
+                <div class="tile" style="background: rgba(45, 212, 191, 0.05); border-color: rgba(45, 212, 191, 0.2);">
+                    <h3 style="color: var(--accent-teal);">Disruptive Advantages</h3>
+                    <p style="color: #cbd5e1;">- Software-defined infrastructure<br>- AI-predicted load balancing<br>-
+                        Integrated Zero-Trust architecture</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">CAPABILITY MATRIX</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Capabilities</th>
+                            <th>Legacy Providers</th>
+                            <th>Digital First Niche</th>
+                            <th style="color: var(--accent-teal);">Our Platform</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AI Optimization</td>
+                            <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i></td>
+                            <td><i class="fa-solid fa-circle-check" style="color: var(--accent-violet);"></i></td>
+                            <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Global Edge Network</td>
+                            <td><i class="fa-solid fa-circle-check" style="color: #64748b;"></i></td>
+                            <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i></td>
+                            <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Green Computing</td>
+                            <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i></td>
+                            <td><i class="fa-solid fa-circle-xmark" style="color: #64748b;"></i></td>
+                            <td><i class="fa-solid fa-circle-check" style="color: var(--accent-teal);"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">MARKET SHARE GROWTH</h2>
+        <div class="content-area">
+            <div class="bar-chart">
+                <div class="bar">
+                    <div class="bar-label">2024 (Actual)</div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: 15%;"></div>
+                    </div>
+                    <div style="width: 50px;">15%</div>
+                </div>
+                <div class="bar">
+                    <div class="bar-label">2025 (Forecast)</div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: 22%;"></div>
+                    </div>
+                    <div style="width: 50px;">22%</div>
+                </div>
+                <div class="bar">
+                    <div class="bar-label">2026 (Target)</div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: 35%;"></div>
+                    </div>
+                    <div style="width: 50px;">35%</div>
+                </div>
+            </div>
+            <p style="margin-top: 40px; font-size: 18px; font-style: italic;">Note: Expansion into Southeast Asia and
+                European markets is the primary driver for 2026 growth.</p>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">REVENUE PROJECTIONS (USD M)</h2>
+        <div class="content-area">
+            <div style="width: 100%; height: 350px; position: relative;">
+                <svg viewBox="0 0 1000 400" style="width: 100%; height: 100%;">
+                    <defs>
+                        <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="var(--accent-teal)" stop-opacity="0.4" />
+                            <stop offset="100%" stop-color="var(--accent-teal)" stop-opacity="0" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M0,350 L200,320 L400,280 L600,200 L800,120 L1000,50 L1000,400 L0,400 Z"
+                        fill="url(#areaGradient)"></path>
+                    <polyline points="0,350 200,320 400,280 600,200 800,120 1000,50" fill="none"
+                        stroke="var(--accent-teal)" stroke-width="4"></polyline>
+                    <circle cx="200" cy="320" r="6" fill="var(--bg-color)" stroke="var(--accent-teal)" stroke-width="3">
+                    </circle>
+                    <circle cx="400" cy="280" r="6" fill="var(--bg-color)" stroke="var(--accent-teal)" stroke-width="3">
+                    </circle>
+                    <circle cx="600" cy="200" r="6" fill="var(--bg-color)" stroke="var(--accent-teal)" stroke-width="3">
+                    </circle>
+                    <circle cx="800" cy="120" r="6" fill="var(--bg-color)" stroke="var(--accent-teal)" stroke-width="3">
+                    </circle>
+                    <text x="0" y="380" fill="var(--secondary-text)" font-family="Space Mono" font-size="14">2023</text>
+                    <text x="1000" y="380" fill="var(--secondary-text)" font-family="Space Mono" font-size="14"
+                        text-anchor="end">2027</text>
+                </svg>
+            </div>
+            <p style="text-align: center; color: var(--accent-violet); font-weight: 700;">ACCELERATED SCALING PHASE
+                EXPECTED IN Q3 2026</p>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">IMPLEMENTATION ROADMAP</h2>
+        <div class="content-area">
+            <div class="timeline-layout">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3>Q1 - RESEARCH</h3>
+                    <p style="font-size: 16px;">Core R&D on next-gen quantum encryption protocols.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3>Q2 - BETA</h3>
+                    <p style="font-size: 16px;">Pilot program with top 50 Fortune 500 clients.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: var(--accent-violet);"></div>
+                    <h3>Q3 - SCALE</h3>
+                    <p style="font-size: 16px;">Rapid deployment across 12 new global regions.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3>Q4 - GLOBAL</h3>
+                    <p style="font-size: 16px;">Full network maturity and ecosystem dominance.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide11">
+        <div class="content-area" style="text-align: center;">
+            <div class="quote-layout">
+                <blockquote>Technology is the lever that moves the world. Our mission is to build the most robust lever
+                    ever created.</blockquote>
+                <cite>— DR. ELENA VANCE, CTO</cite>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide12">
+        <div class="title-layout">
+            <h1 style="color: var(--accent-teal);">ANY QUESTIONS?</h1>
+            <p style="color: var(--primary-text);">Thank you for your time and consideration.</p>
+            <div style="margin-top: 50px;">
+                <p style="font-size: 18px; color: var(--secondary-text);"><i class="fa-solid fa-globe"></i>
+                    futureinfra.com</p>
+                <p style="font-size: 18px; color: var(--secondary-text);"><i class="fa-solid fa-envelope"></i>
+                    contact@futureinfra.com</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
