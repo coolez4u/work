@@ -1358,7 +1358,7 @@
       <div class="slide-body">
         <div class="row" style="height:100%">
           <div style="flex:1.2;display:flex;align-items:center;justify-content:center" class="glass">
-            <canvas id="budgetChart" style="max-height:300px;max-width:100%"></canvas>
+            <canvas id="budgetChart" style="max-height:340px;max-width:100%"></canvas>
           </div>
           <div style="flex:1.8;display:flex;flex-direction:column;gap:1vw">
             <div class="total-metric-card">
@@ -1514,28 +1514,55 @@
       chartDone = true;
       const ctx = document.getElementById('budgetChart').getContext('2d');
       new Chart(ctx, {
-        type: 'doughnut',
+        type: 'pie',
         data: {
           labels: ['네이버', '구글', '카카오', 'SNS/당근'],
           datasets: [{
             data: [1000000, 500000, 500000, 100000],
-            backgroundColor: ['#1e5fff', '#3b82f6', '#60a5fa', '#93c5fd'],
+            backgroundColor: ['#03C75B', '#DB4437', '#f9e000', '#4285F4'],
             borderColor: '#0a1628',
-            borderWidth: 3,
-            hoverBorderWidth: 0
+            borderWidth: 1,
+            hoverOffset: 16,
+            hoverBorderWidth: 1
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: true,
-          animation: { duration: 1200, easing: 'easeInOutQuart' },
+          animation: {
+            animateRotate: true,
+            animateScale: true,
+            duration: 1300,
+            easing: 'easeOutQuart'
+          },
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { color: '#94a3b8', font: { family: "'Noto Sans KR'", size: 12 }, padding: 14, boxWidth: 14 }
+              labels: {
+                color: '#94a3b8',
+                font: { family: "'Noto Sans KR'", size: 12 },
+                padding: 14,
+                boxWidth: 14,
+                usePointStyle: true,
+                pointStyle: 'circle'
+              }
             },
-            title: { display: true, text: '플랫폼별 예산 비중', color: '#e2e8f0', font: { size: 14, weight: '700', family: "'Noto Sans KR'" }, padding: { bottom: 10 } },
-            tooltip: { callbacks: { label: c => ' ₩' + c.parsed.toLocaleString() + ' (' + Math.round(c.parsed / 2100000 * 100) + '%)' } }
+            title: {
+              display: true,
+              text: '플랫폼별 예산 비중',
+              color: '#e2e8f0',
+              font: { size: 14, weight: '700', family: "'Noto Sans KR'" },
+              padding: { bottom: 10 }
+            },
+            tooltip: {
+              callbacks: {
+                label: c => {
+                  const value = c.parsed;
+                  const percent = Math.round(value / 2100000 * 100);
+                  return ' ' + c.label + ': ₩' + value.toLocaleString() + ' (' + percent + '%)';
+                }
+              }
+            }
           }
         }
       });
