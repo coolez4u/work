@@ -1807,6 +1807,7 @@
         const dots = document.getElementById('dots');
         const count = document.getElementById('count');
         let current = 0, chartReady = false;
+        let naverPieChart = null, budgetPieChart = null;
         slides.forEach((_, i) => { const b = document.createElement('button'); b.type = 'button'; b.onclick = () => show(i); dots.appendChild(b) });
         document.getElementById('prevBtn').onclick = () => show(current - 1);
         document.getElementById('nextBtn').onclick = () => show(current + 1);
@@ -1815,13 +1816,70 @@
             slides.forEach((s, n) => s.classList.toggle('active', n === current));
             [...dots.children].forEach((d, n) => d.classList.toggle('active', n === current));
             count.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
-            if (!chartReady) initCharts();
+
+            if (!chartReady) {
+                initCharts();
+            }
+
+            setTimeout(() => {
+                if (current === 2 && naverPieChart) {
+                    naverPieChart.reset();
+                    naverPieChart.update();
+                }
+                if (current === 6 && budgetPieChart) {
+                    budgetPieChart.reset();
+                    budgetPieChart.update();
+                }
+            }, 80);
         }
         function initCharts() {
             if (!window.Chart) return; chartReady = true;
             Chart.defaults.color = '#b7c4d8'; Chart.defaults.font.family = '"Noto Sans KR", sans-serif';
             const grid = 'rgba(183,196,216,.14)';
-            new Chart(naverChart, { type: 'doughnut', data: { labels: ['테니스라켓', '테니스화', '테니스용품', '테니스공', '스쿼시'], datasets: [{ data: [1773200, 1163800, 362340, 191840, 182600], backgroundColor: ['#2482ff', '#3fa0ff', '#9ddcff', '#c9ff00', '#6a85ba'], borderColor: '#071426', borderWidth: 4 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '58%', animation: { animateRotate: true, animateScale: false, duration: 900, easing: 'easeOutQuart' }, plugins: { legend: { position: 'right', labels: { boxWidth: 10 } } } } });
+            naverPieChart = new Chart(naverChart, {
+                type: 'pie',
+                data: {
+                    labels: ['테니스라켓', '테니스화', '테니스용품', '테니스공', '스쿼시'],
+                    datasets: [{
+                        data: [1773200, 1163800, 362340, 191840, 182600],
+                        backgroundColor: ['#03C75B', '#4285F4', '#f9e000', '#FF9800', '#9C27B0'],
+                        borderColor: '#141F30',
+                        borderWidth: 1,
+                        hoverOffset: 16
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 1300,
+                        easing: 'easeOutQuart'
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#b7c4d8',
+                                boxWidth: 12,
+                                padding: 12,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (c) {
+                                    const total = c.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percent = ((c.raw / total) * 100).toFixed(1);
+                                    return `${c.label}: ${c.raw.toLocaleString('ko-KR')}원 (${percent}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
             if (document.getElementById('googleChart')) new Chart(googleChart, { type: 'bar', data: { labels: ['라켓', '테니스화', '테니스공', '스쿼시'], datasets: [{ label: '검색량', data: [2400, 2400, 2900, 940], backgroundColor: '#2482ff', borderRadius: 8 }, { label: '입찰가', data: [2400, 3000, 700, 1000], backgroundColor: '#c9ff00', borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1000, easing: 'easeOutQuart' }, animations: { y: { from: 0 } }, plugins: { legend: { position: 'bottom' } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: grid } } } } });
             new Chart(kakaoChart, { type: 'radar', data: { labels: ['라켓', '테니스화', '테니스공', '스쿼시'], datasets: [{ label: '노출수', data: [607, 651, 209, 83], backgroundColor: 'rgba(36,130,255,.25)', borderColor: '#2482ff', pointBackgroundColor: '#c9ff00' }, { label: '입찰가', data: [170, 140, 600, 500], backgroundColor: 'rgba(201,255,0,.18)', borderColor: '#c9ff00', pointBackgroundColor: '#2482ff' }] }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1100, easing: 'easeOutQuart' }, plugins: { legend: { position: 'bottom' } }, scales: { r: { grid: { color: grid }, angleLines: { color: grid } } } } });
 
@@ -1852,7 +1910,70 @@
                 });
             }
 
-            new Chart(budgetChart, { type: 'doughnut', data: { labels: ['네이버', '구글', '카카오', 'SNS/당근'], datasets: [{ data: [1000000, 500000, 500000, 100000], backgroundColor: ['#2482ff', '#5da2ff', '#c9ff00', '#46627f'], borderColor: '#071426', borderWidth: 5, hoverOffset: 12 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '58%', animation: { animateRotate: true, animateScale: true, duration: 1300 }, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => `${c.label}: ${c.raw.toLocaleString('ko-KR')}원` } } } } });
+            const budgetColors = ['#03C75B', '#DB4437', '#f9e000', '#4285F4'];
+
+            function handleBudgetLegendHover(evt, item, legend) {
+                const colors = legend.chart.data.datasets[0].backgroundColor;
+                colors.forEach((color, index) => {
+                    colors[index] = index === item.index ? budgetColors[index] : budgetColors[index] + '4D';
+                });
+                legend.chart.update();
+            }
+
+            function handleBudgetLegendLeave(evt, item, legend) {
+                const colors = legend.chart.data.datasets[0].backgroundColor;
+                colors.forEach((_, index) => {
+                    colors[index] = budgetColors[index];
+                });
+                legend.chart.update();
+            }
+
+            budgetPieChart = new Chart(budgetChart, {
+                type: 'pie',
+                data: {
+                    labels: ['네이버', '구글', '카카오', 'SNS/당근'],
+                    datasets: [{
+                        data: [1000000, 500000, 500000, 100000],
+                        backgroundColor: [...budgetColors],
+                        borderColor: '#141F30',
+                        borderWidth: 1,
+                        hoverOffset: 18
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        animateRotate: true,
+                        animateScale: false,
+                        duration: 900,
+                        easing: 'easeOutQuart'
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            onHover: handleBudgetLegendHover,
+                            onLeave: handleBudgetLegendLeave,
+                            labels: {
+                                color: '#b7c4d8',
+                                boxWidth: 12,
+                                padding: 14,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (c) {
+                                    const total = c.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percent = ((c.raw / total) * 100).toFixed(1);
+                                    return `${c.label}: ${c.raw.toLocaleString('ko-KR')}원 (${percent}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
         show(0);
     </script>
