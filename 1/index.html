@@ -7,88 +7,100 @@
     <title>테니스 용품 전문몰 월간 광고 예산 보고서</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* FOUT 방지: 폰트 로드 전 숨김 */
+        html {
+            visibility: hidden;
+        }
+
+        html.fonts-ready {
+            visibility: visible;
+        }
+
         :root {
-            --bg: #050b18;
-            --panel: #071426;
-            --panel2: #091a31;
-            --line: #1d3557;
-            --line2: #2554a8;
             --text: #f4f7fb;
             --sub: #b7c4d8;
-            --muted: #7d8da6;
             --lime: #c9ff00;
-            --lime2: #8fe000;
             --blue: #2482ff;
             --cyan: #35d8ff;
             --orange: #ff7a00;
-            --card: rgba(7, 20, 38, .78);
-            --glass: rgba(9, 26, 49, .72);
         }
 
-        * {
-            box-sizing: border-box
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
         }
 
         html,
         body {
             margin: 0;
-            min-height: 100%;
-            font-family: "Noto Sans KR", sans-serif;
-            background: #141F30;
-            color: var(--text)
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Noto Sans KR", "Apple SD Gothic Neo", "맑은 고딕", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            color: var(--text);
         }
 
-        body {
-            padding: 18px 18px 84px;
-            background:
-                radial-gradient(circle at 18% 2%, rgba(36, 130, 255, .25), transparent 28%),
-                radial-gradient(circle at 96% 0%, rgba(201, 255, 0, .18), transparent 20%),
-                linear-gradient(135deg, #141F30, #1b2b42 46%, #141F30)
+        /* 스테이지 */
+        .stage {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 18% 2%, rgba(36, 130, 255, .22), transparent 28%),
+                radial-gradient(circle at 96% 0%, rgba(201, 255, 0, .15), transparent 20%),
+                linear-gradient(135deg, #0d1826, #162236 46%, #0d1826);
         }
 
         .deck {
-            max-width: 1280px;
-            margin: 0 auto
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            transform-origin: center center;
+            flex-shrink: 0;
         }
 
         .slide {
             display: none;
-            width: min(1280px, calc(100vw - 36px));
-            aspect-ratio: 16/9;
-            margin: 0 auto;
-            position: relative;
+            position: absolute;
+            inset: 0;
             overflow: hidden;
             padding: 34px 44px;
             border: 1px solid rgba(77, 143, 255, .55);
-            background:
-                radial-gradient(circle at 90% 12%, rgba(36, 130, 255, .18), transparent 26%),
+            background: radial-gradient(circle at 90% 12%, rgba(36, 130, 255, .18), transparent 26%),
                 radial-gradient(circle at 8% 88%, rgba(201, 255, 0, .07), transparent 24%),
                 linear-gradient(135deg, rgba(20, 31, 48, .98), rgba(17, 35, 57, .98));
             box-shadow: 0 24px 60px rgba(0, 0, 0, .34), inset 0 0 0 1px rgba(255, 255, 255, .03);
-            animation: fadeUp .45s cubic-bezier(.2, .85, .25, 1) both;
         }
 
         .slide.active {
-            display: block
+            display: block;
+            animation: fadeUp .4s cubic-bezier(.2, .85, .25, 1) both;
         }
 
         @keyframes fadeUp {
             from {
                 opacity: 0;
-                transform: translateY(28px)
+                transform: translateY(22px);
             }
 
             to {
                 opacity: 1;
-                transform: none
+                transform: none;
             }
         }
 
+        /* 타이포 */
         .title {
             font-family: "Bebas Neue", "Noto Sans KR", sans-serif;
             font-size: 46px;
@@ -102,48 +114,45 @@
         .title.kr {
             font-family: "Noto Sans KR", sans-serif;
             font-weight: 900;
-            letter-spacing: -.05em
+            letter-spacing: -.05em;
         }
 
         .subtitle {
-            margin: 0 0 18px;
+            margin: 0 0 16px;
             color: var(--sub);
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.55;
-            word-break: keep-all
+            word-break: keep-all;
         }
 
         .neon {
             color: var(--lime);
-            text-shadow: 0 0 12px rgba(201, 255, 0, .28)
+            text-shadow: 0 0 12px rgba(201, 255, 0, .28);
         }
 
-        .blue {
-            color: var(--blue)
-        }
-
+        /* 패널 */
         .panel {
             background: linear-gradient(145deg, rgba(22, 40, 63, .92), rgba(12, 27, 45, .82));
             border: 1px solid rgba(72, 126, 205, .35);
             border-radius: 14px;
             padding: 16px;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04), 0 12px 28px rgba(0, 0, 0, .18), 0 0 22px rgba(36, 130, 255, .05);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04), 0 12px 28px rgba(0, 0, 0, .18);
         }
 
         .panel.lime {
             border-color: rgba(201, 255, 0, .5);
-            box-shadow: 0 0 18px rgba(201, 255, 0, .08)
+            box-shadow: 0 0 18px rgba(201, 255, 0, .08);
         }
 
         .panel.blue {
-            border-color: rgba(36, 130, 255, .65)
+            border-color: rgba(36, 130, 255, .65);
         }
 
         .panel h3 {
             margin: 0 0 8px;
             color: var(--text);
             font-size: 18px;
-            font-weight: 900
+            font-weight: 900;
         }
 
         .panel p,
@@ -151,49 +160,51 @@
             font-size: 14px;
             line-height: 1.5;
             color: var(--sub);
-            word-break: keep-all
+            word-break: keep-all;
         }
 
         .money {
-            font-family: "Bebas Neue";
+            font-family: "Bebas Neue", monospace;
             font-size: 38px;
             letter-spacing: .02em;
             color: var(--lime);
-            line-height: 1
+            line-height: 1;
         }
 
+        /* 그리드/리스트 */
         .grid2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px
+            gap: 16px;
         }
 
         .grid3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 14px
+            gap: 14px;
         }
 
         ul.clean {
             padding: 0;
             margin: 0;
-            list-style: none
+            list-style: none;
         }
 
         ul.clean li {
             position: relative;
             padding-left: 18px;
-            margin-bottom: 6px
+            margin-bottom: 6px;
         }
 
-        ul.clean li:before {
+        ul.clean li::before {
             content: "›";
             position: absolute;
             left: 0;
             color: var(--lime);
-            font-weight: 900
+            font-weight: 900;
         }
 
+        /* 테이블 */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -201,7 +212,7 @@
             border: 1px solid rgba(72, 126, 205, .35);
             border-radius: 10px;
             overflow: hidden;
-            font-size: 13px
+            font-size: 13px;
         }
 
         th {
@@ -210,31 +221,32 @@
             padding: 9px 10px;
             border-bottom: 1px solid rgba(72, 126, 205, .38);
             font-weight: 800;
-            text-align: left
+            text-align: left;
         }
 
         td {
             padding: 8px 10px;
             border-bottom: 1px solid rgba(72, 126, 205, .2);
-            color: var(--sub)
+            color: var(--sub);
         }
 
         tr:last-child td {
-            border-bottom: 0
+            border-bottom: 0;
         }
 
         .right {
-            text-align: right
+            text-align: right;
         }
 
         .center {
-            text-align: center
+            text-align: center;
         }
 
+        /* KPI */
         .kpi {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px
+            gap: 10px;
         }
 
         .kpi .box {
@@ -242,13 +254,13 @@
             border-radius: 10px;
             padding: 12px;
             text-align: center;
-            background: rgba(7, 20, 38, .7)
+            background: rgba(7, 20, 38, .7);
         }
 
         .kpi span {
             display: block;
             color: var(--sub);
-            font-size: 12px
+            font-size: 12px;
         }
 
         .kpi strong {
@@ -256,107 +268,43 @@
             color: var(--lime);
             font-size: 25px;
             font-family: "Bebas Neue";
-            letter-spacing: .04em
+            letter-spacing: .04em;
         }
 
+        /* 차트 래퍼 */
         .chartBox {
-            height: 250px;
-            min-height: 0
+            position: relative;
+            height: 220px;
         }
 
-        .chartTall {
-            height: 360px
+        .chartBox canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
         }
 
-        .nav {
-            position: fixed;
-            left: 50%;
-            bottom: 18px;
-            transform: translateX(-50%);
-            z-index: 30;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            background: rgba(20, 31, 48, .94);
-            border: 1px solid rgba(77, 143, 255, .55);
-            backdrop-filter: blur(12px)
-        }
-
-        .nav button {
-            background: transparent;
-            border: 1px solid rgba(72, 126, 205, .55);
-            color: var(--text);
-            border-radius: 6px;
-            padding: 7px 14px;
-            font-weight: 800;
-            cursor: pointer
-        }
-
-        .nav button:hover {
-            border-color: var(--lime);
-            color: var(--lime)
-        }
-
-        .count {
-            font-family: "Bebas Neue";
-            font-size: 24px;
-            color: var(--lime);
-            min-width: 58px;
-            text-align: center
-        }
-
-        .dots {
-            display: flex;
-            gap: 7px
-        }
-
-        .dots button {
-            width: 7px;
-            height: 7px;
-            padding: 0;
-            border: 0;
-            border-radius: 50%;
-            background: #46536b
-        }
-
-        .dots button.active {
-            background: var(--lime);
-            transform: scale(1.35)
-        }
-
+        /* 하단 장식 */
         .slide::after {
             content: "";
             position: absolute;
             inset: auto -80px 0 -80px;
             height: 190px;
             pointer-events: none;
-            background:
-                linear-gradient(7deg, transparent 0 48%, rgba(77, 143, 255, .16) 49% 50%, transparent 51%),
+            background: linear-gradient(7deg, transparent 0 48%, rgba(77, 143, 255, .16) 49% 50%, transparent 51%),
                 linear-gradient(-7deg, transparent 0 48%, rgba(201, 255, 0, .08) 49% 50%, transparent 51%);
             opacity: .45;
         }
 
         .slide>* {
             position: relative;
-            z-index: 1
+            z-index: 1;
         }
 
         .cover::after {
-            display: none
+            display: none;
         }
 
-
-
-        .chartBox,
-        .chartBox canvas,
-        .chartTall,
-        .chartTall canvas {
-            transform: none !important;
-        }
-
-        /* Page-specific entrance animations */
+        /* 애니메이션 */
         .slide.active .animate-rise {
             animation: riseIn .7s cubic-bezier(.2, .85, .25, 1) both;
         }
@@ -367,10 +315,6 @@
 
         .slide.active .animate-rise.delay-2 {
             animation-delay: .16s;
-        }
-
-        .slide.active .animate-rise.delay-3 {
-            animation-delay: .24s;
         }
 
         @keyframes riseIn {
@@ -417,7 +361,44 @@
             }
         }
 
-        /* Simple logo badges */
+        .in-place {
+            opacity: 0;
+            transform: scale(.985);
+        }
+
+        .slide.active .in-place {
+            animation: fadeScaleIn .52s ease-out both;
+        }
+
+        .slide.active .in-place.delay-1 {
+            animation-delay: .07s;
+        }
+
+        .slide.active .in-place.delay-2 {
+            animation-delay: .14s;
+        }
+
+        .slide.active .in-place.delay-3 {
+            animation-delay: .21s;
+        }
+
+        .slide.active .in-place.delay-4 {
+            animation-delay: .28s;
+        }
+
+        @keyframes fadeScaleIn {
+            from {
+                opacity: 0;
+                transform: scale(.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* 로고 배지 */
         .logo-badge {
             display: inline-grid;
             place-items: center;
@@ -426,11 +407,9 @@
             border-radius: 10px;
             margin-right: 8px;
             vertical-align: -8px;
-            font-family: "Noto Sans KR", sans-serif;
             font-size: 15px;
             font-weight: 900;
             color: white;
-            box-shadow: 0 0 18px rgba(0, 0, 0, .25);
         }
 
         .logo-badge.instagram {
@@ -460,17 +439,14 @@
 
         .logo-badge.karrot {
             background: linear-gradient(135deg, #ff7a00, #ff9f1c);
-            color: white;
             font-size: 19px;
         }
 
-        /* Cover */
+        /* ── 커버 ── */
         .cover {
             padding: 0;
-            background:
-                linear-gradient(90deg, rgba(20, 31, 48, .98), rgba(20, 31, 48, .88) 48%, rgba(20, 31, 48, .44)),
-                radial-gradient(circle at 78% 68%, rgba(201, 255, 0, .32), transparent 22%),
-                linear-gradient(135deg, #141F30, #1b2b42)
+            background: linear-gradient(90deg, rgba(20, 31, 48, .98), rgba(20, 31, 48, .88) 48%, rgba(20, 31, 48, .44)),
+                radial-gradient(circle at 78% 68%, rgba(201, 255, 0, .32), transparent 22%), linear-gradient(135deg, #141F30, #1b2b42);
         }
 
         .cover-inner {
@@ -479,7 +455,7 @@
             align-items: center;
             padding-left: 70px;
             position: relative;
-            z-index: 3
+            z-index: 3;
         }
 
         .cover .eyebrow {
@@ -487,7 +463,7 @@
             color: var(--lime);
             font-size: 19px;
             margin-bottom: 14px;
-            font-style: italic
+            font-style: italic;
         }
 
         .cover h1 {
@@ -497,13 +473,13 @@
             letter-spacing: .02em;
             margin: 0;
             color: white;
-            text-shadow: 5px 5px 0 rgba(36, 130, 255, .3)
+            text-shadow: 5px 5px 0 rgba(36, 130, 255, .3);
         }
 
         .cover h1 b {
             display: block;
             color: var(--lime);
-            text-shadow: 5px 5px 0 rgba(143, 224, 0, .18)
+            text-shadow: 5px 5px 0 rgba(143, 224, 0, .18);
         }
 
         .cover .rule {
@@ -511,14 +487,14 @@
             height: 1px;
             background: linear-gradient(90deg, #fff, transparent);
             opacity: .45;
-            margin: 28px 0 12px
+            margin: 28px 0 12px;
         }
 
         .cover small {
             display: block;
             font-weight: 800;
             letter-spacing: .05em;
-            color: #fff
+            color: #fff;
         }
 
         .cover .big-money {
@@ -527,22 +503,23 @@
             color: var(--lime);
             line-height: .95;
             margin: 8px 0 28px;
-            text-shadow: 0 0 22px rgba(201, 255, 0, .25)
+            text-shadow: 0 0 22px rgba(201, 255, 0, .25);
         }
 
         .cover-meta {
             font-size: 14px;
             color: #e8eef8;
-            line-height: 1.7
+            line-height: 1.7;
         }
 
+        /* 테니스 일러스트 */
         .tennis-scene {
             position: absolute;
             right: 60px;
             top: 32px;
             width: 470px;
             height: 620px;
-            z-index: 2
+            z-index: 2;
         }
 
         .racket {
@@ -552,18 +529,18 @@
             width: 230px;
             height: 430px;
             transform: rotate(18deg);
-            animation: racketFloat 4.8s ease-in-out infinite
+            animation: racketFloat 4.8s ease-in-out infinite;
         }
 
         @keyframes racketFloat {
 
             0%,
             100% {
-                transform: rotate(18deg) translateY(0)
+                transform: rotate(18deg) translateY(0);
             }
 
             50% {
-                transform: rotate(14deg) translateY(-10px)
+                transform: rotate(14deg) translateY(-10px);
             }
         }
 
@@ -575,19 +552,18 @@
             height: 285px;
             border: 15px solid #dfe9f7;
             border-radius: 50%;
-            background:
-                repeating-linear-gradient(90deg, transparent 0 14px, rgba(126, 190, 255, .65) 15px 17px),
+            background: repeating-linear-gradient(90deg, transparent 0 14px, rgba(126, 190, 255, .65) 15px 17px),
                 repeating-linear-gradient(0deg, transparent 0 14px, rgba(126, 190, 255, .65) 15px 17px);
-            box-shadow: inset 0 0 0 7px #071426, 0 20px 32px rgba(0, 0, 0, .38)
+            box-shadow: inset 0 0 0 7px #071426, 0 20px 32px rgba(0, 0, 0, .38);
         }
 
-        .racket-head:before {
+        .racket-head::before {
             content: "";
             position: absolute;
             inset: -10px;
             border: 5px solid var(--lime);
             border-radius: 50%;
-            clip-path: polygon(0 0, 100% 0, 100% 34%, 0 22%)
+            clip-path: polygon(0 0, 100% 0, 100% 34%, 0 22%);
         }
 
         .racket-throat {
@@ -599,7 +575,7 @@
             border-left: 12px solid #dfe9f7;
             border-right: 12px solid #dfe9f7;
             border-bottom: 14px solid #dfe9f7;
-            border-radius: 0 0 42px 42px
+            border-radius: 0 0 42px 42px;
         }
 
         .racket-handle {
@@ -609,24 +585,24 @@
             width: 42px;
             height: 145px;
             border-radius: 18px;
-            background: repeating-linear-gradient(-25deg, #111827 0 11px, var(--lime) 12px 19px)
+            background: repeating-linear-gradient(-25deg, #111827 0 11px, var(--lime) 12px 19px);
         }
 
         .ball {
             position: absolute;
             border-radius: 50%;
             background: radial-gradient(circle at 32% 26%, #ffffa5 0 13%, var(--lime) 14% 58%, #86b900 100%);
-            box-shadow: 0 0 24px rgba(201, 255, 0, .65), 0 18px 22px rgba(0, 0, 0, .36)
+            box-shadow: 0 0 24px rgba(201, 255, 0, .65), 0 18px 22px rgba(0, 0, 0, .36);
         }
 
-        .ball:before {
+        .ball::before {
             content: "";
             position: absolute;
             inset: 8px;
             border-left: 3px solid rgba(255, 255, 255, .85);
             border-right: 3px solid rgba(255, 255, 255, .85);
             border-radius: 50%;
-            transform: rotate(28deg)
+            transform: rotate(28deg);
         }
 
         .ball.main {
@@ -634,22 +610,22 @@
             height: 68px;
             right: 198px;
             bottom: 132px;
-            animation: ballTap 1.2s ease-in-out infinite
+            animation: ballTap 1.2s ease-in-out infinite;
         }
 
         @keyframes ballTap {
 
             0%,
             100% {
-                transform: translateY(-76px)
+                transform: translateY(-76px);
             }
 
             45% {
-                transform: translateY(0) scale(1)
+                transform: translateY(0) scale(1);
             }
 
             52% {
-                transform: translateY(10px) scale(1.12, .85)
+                transform: translateY(10px) scale(1.12, .85);
             }
         }
 
@@ -661,7 +637,7 @@
             height: 140px;
             transform: perspective(500px) rotateX(58deg);
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent);
-            border-top: 2px solid rgba(255, 255, 255, .65)
+            border-top: 2px solid rgba(255, 255, 255, .65);
         }
 
         .splash {
@@ -673,7 +649,7 @@
             background: radial-gradient(circle, rgba(201, 255, 0, .7) 0 2px, transparent 3px);
             background-size: 18px 18px;
             filter: blur(.2px);
-            animation: splash 1.2s ease-in-out infinite
+            animation: splash 1.2s ease-in-out infinite;
         }
 
         @keyframes splash {
@@ -681,12 +657,12 @@
             0%,
             100% {
                 opacity: .25;
-                transform: scale(.9)
+                transform: scale(.9);
             }
 
             50% {
                 opacity: .9;
-                transform: scale(1.05)
+                transform: scale(1.05);
             }
         }
 
@@ -698,17 +674,17 @@
             height: 210px;
             border-radius: 50%;
             background: radial-gradient(circle at 34% 28%, #ffffa5 0 12%, var(--lime) 13% 58%, #6ea900);
-            box-shadow: 0 0 60px rgba(201, 255, 0, .45)
+            box-shadow: 0 0 60px rgba(201, 255, 0, .45);
         }
 
-        .final-ball:before {
+        .final-ball::before {
             content: "";
             position: absolute;
             inset: 30px;
             border-left: 9px solid rgba(255, 255, 255, .84);
             border-right: 9px solid rgba(255, 255, 255, .84);
             border-radius: 50%;
-            transform: rotate(28deg)
+            transform: rotate(28deg);
         }
 
         .final-splash {
@@ -719,64 +695,21 @@
             height: 300px;
             background: radial-gradient(circle, rgba(201, 255, 0, .7) 0 2px, transparent 3px);
             background-size: 22px 22px;
-            opacity: .55
+            opacity: .55;
         }
 
-        @media(max-width:900px) {
-            body {
-                padding: 8px 8px 82px
-            }
-
-            .slide {
-                width: calc(100vw - 16px);
-                aspect-ratio: auto;
-                min-height: 720px;
-                padding: 28px
-            }
-
-            .grid2,
-            .grid3,
-            .kpi {
-                grid-template-columns: 1fr !important
-            }
-
-            .cover-inner {
-                padding-left: 34px
-            }
-
-            .cover h1 {
-                font-size: 58px
-            }
-
-            .tennis-scene {
-                opacity: .32;
-                right: -120px
-            }
-
-            .bottom-note {
-                position: static;
-                margin-top: 14px
-            }
-        }
-
-        /* Page 4 rebuilt layout + in-place animation */
-        .google-plan-slide .title,
-        .google-plan-slide .subtitle,
-        .google-plan-slide .panel {
-            transform: none;
-        }
-
+        /* ── 페이지 4 구글 레이아웃 ── */
         .google-layout {
             display: grid;
             grid-template-columns: 1.08fr .72fr;
-            gap: 26px;
-            height: calc(100% - 112px);
+            gap: 24px;
+            height: calc(100% - 100px);
         }
 
         .google-left,
         .google-right {
             display: grid;
-            gap: 16px;
+            gap: 14px;
             min-height: 0;
         }
 
@@ -785,18 +718,7 @@
         }
 
         .google-right {
-            grid-template-rows: auto 1fr 150px;
-        }
-
-        .performance-panel h3,
-        .keyword-panel h3,
-        .youtube-panel h3 {
-            font-size: 19px;
-            margin-bottom: 14px;
-        }
-
-        .kpi-wide {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto 1fr 130px;
         }
 
         .metric-fill {
@@ -818,7 +740,7 @@
 
         .metric-fill>* {
             position: relative;
-            z-index: 1
+            z-index: 1;
         }
 
         .slide.active .metric-fill::before {
@@ -827,78 +749,12 @@
 
         @keyframes fillInPlace {
             from {
-                transform: scaleX(0)
+                transform: scaleX(0);
             }
 
             to {
-                transform: scaleX(1)
+                transform: scaleX(1);
             }
-        }
-
-        .in-place {
-            opacity: 0;
-            transform: scale(.985);
-        }
-
-        .slide.active .in-place {
-            animation: fadeScaleIn .52s ease-out both;
-        }
-
-        .slide.active .in-place.delay-1 {
-            animation-delay: .07s
-        }
-
-        .slide.active .in-place.delay-2 {
-            animation-delay: .14s
-        }
-
-        .slide.active .in-place.delay-3 {
-            animation-delay: .21s
-        }
-
-        .slide.active .in-place.delay-4 {
-            animation-delay: .28s
-        }
-
-        @keyframes fadeScaleIn {
-            from {
-                opacity: 0;
-                transform: scale(.985)
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1)
-            }
-        }
-
-        .keyword-panel table th,
-        .keyword-panel table td {
-            padding: 10px 12px;
-        }
-
-        .youtube-panel {
-            border-color: rgba(255, 82, 82, .45);
-            background: linear-gradient(145deg, rgba(35, 22, 42, .92), rgba(18, 20, 39, .88));
-        }
-
-        .youtube-panel h3 {
-            color: #fff;
-        }
-
-        .youtube-panel h3::first-letter {
-            color: #ff4747
-        }
-
-        .youtube-panel p b {
-            font-size: 25px;
-            color: #fff;
-        }
-
-        .youtube-note {
-            color: var(--sub);
-            font-size: 16px;
-            line-height: 1.75;
         }
 
         .roas-strip {
@@ -917,403 +773,84 @@
             background: linear-gradient(90deg, var(--blue), #63a7ff);
         }
 
+        .youtube-panel {
+            border-color: rgba(255, 82, 82, .45);
+            background: linear-gradient(145deg, rgba(35, 22, 42, .92), rgba(18, 20, 39, .88));
+        }
+
+        .youtube-panel h3 {
+            color: #fff;
+        }
+
         .mini-chart {
-            height: 150px;
+            height: 130px !important;
         }
 
-        .chartBox canvas {
-            transform: none !important;
-        }
-
-
-        /* 요청 반영: 3,5,6,7 페이지 내부 박스 확장 배치 */
-        .page-3 .grid2 {
-            height: calc(100% - 104px);
-            align-items: stretch;
-        }
-
-        .page-3 .grid2>table {
-            height: 100%;
-            font-size: 14px;
-        }
-
-        .page-3 .grid2>div {
+        /* ── 페이지 5 카카오 ── */
+        .kakao-layout {
+            height: calc(100% - 100px);
             display: grid;
-            grid-template-rows: auto 1fr;
+            grid-template-rows: 150px 1fr;
             gap: 14px;
             min-height: 0;
         }
 
-        .page-3 .grid2>div>.panel.blue {
-            min-height: 168px;
-        }
-
-        .page-3 .chartBox {
-            height: auto !important;
-            min-height: 0;
-            margin-top: 0 !important;
-        }
-
-        .page-3 .chartBox canvas {
-            height: 100% !important;
-        }
-
-        .kakao-fill-layout {
-            height: calc(100% - 104px);
-            display: grid;
-            grid-template-rows: 152px 1fr;
-            gap: 16px;
-            min-height: 0;
-        }
-
-        .kakao-top-cards {
+        .kakao-top {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 18px;
+            gap: 16px;
         }
 
-        .kakao-top-cards .panel {
+        .kakao-card {
             display: flex;
             flex-direction: column;
             justify-content: center;
+            padding: 16px 18px;
         }
 
-        .kakao-bottom-grid {
-            display: grid;
-            grid-template-columns: 1.15fr .85fr;
-            gap: 18px;
-            min-height: 0;
-        }
-
-        .kakao-table-panel {
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .kakao-table-panel h3 {
-            margin-bottom: 12px;
-        }
-
-        .kakao-table-panel table {
-            flex: 1;
-            height: 100%;
-            font-size: 14px;
-        }
-
-        .kakao-table-panel td,
-        .kakao-table-panel th {
-            padding: 10px 12px;
-        }
-
-        .kakao-chart-fill {
-            height: auto !important;
-            min-height: 0;
-        }
-
-        .kakao-chart-fill canvas {
-            height: 100% !important;
-        }
-
-        .sns-test-layout {
-            height: calc(100% - 104px);
-            display: grid;
-            grid-template-rows: 1fr 112px;
-            gap: 16px;
-            min-height: 0;
-        }
-
-        .sns-test-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            min-height: 0;
-        }
-
-        .sns-test-card {
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sns-test-card h3 {
-            margin-bottom: 18px;
-        }
-
-        .sns-test-card ul {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-        }
-
-        .sns-test-card li {
-            font-size: 15px;
-        }
-
-        .sns-budget-bottom {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 28px;
-        }
-
-        .sns-budget-bottom h3 {
-            margin-bottom: 6px;
-        }
-
-        .sns-budget-bottom p {
-            margin: 0;
-        }
-
-        .budget-fit-grid {
-            height: calc(100% - 104px);
-            display: grid;
-            grid-template-columns: .82fr 1.18fr;
-            gap: 20px;
-            min-height: 0;
-        }
-
-        .budget-fit-left {
-            display: grid;
-            grid-template-rows: 132px 1fr;
-            gap: 16px;
-            min-height: 0;
-        }
-
-        .budget-total-fit {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .budget-total-fit .money {
-            font-size: 54px;
-        }
-
-        .budget-chart-fit {
-            height: auto !important;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .budget-chart-fit h3 {
-            margin-bottom: 10px;
-        }
-
-        .budget-chart-canvas-wrap {
-            flex: 1;
-            min-height: 0;
-            position: relative;
-        }
-
-        #budgetChart {
-            width: 100% !important;
-            height: 100% !important;
-            display: block !important;
-        }
-
-        .budget-table-fit {
-            height: 100%;
-            padding: 18px;
-        }
-
-        .budget-table-fit table {
-            height: 100%;
-            font-size: 15px;
-        }
-
-        .budget-table-fit th {
-            padding: 14px 16px;
-        }
-
-        .budget-table-fit td {
-            padding: 15px 16px;
-        }
-
-
-        /* Page 5 top cards: prevent text overlap */
-        .kakao-top-cards {
-            align-items: stretch;
-        }
-
-        .kakao-top-cards .panel {
-            padding: 20px;
-        }
-
-        .kakao-top-cards .panel h3 {
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        .kakao-top-cards .panel .money {
-            font-size: 52px;
-            margin-bottom: 12px;
-        }
-
-        .kakao-top-cards .panel p {
-            margin: 4px 0;
-            line-height: 1.5;
-            font-size: 15px;
-        }
-
-
-        /* 6페이지 최종 교체: 첨부 이미지 기준 */
-        .sns-final-slide {
-            padding: 34px 44px;
-        }
-
-        .sns-final-layout {
-            height: calc(100% - 104px);
-            display: grid;
-            grid-template-rows: 1fr 112px;
-            gap: 16px;
-            min-height: 0;
-        }
-
-        .sns-final-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            min-height: 0;
-        }
-
-        .sns-final-card {
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            padding: 22px 18px;
-        }
-
-        .sns-final-card h3 {
-            font-size: 20px;
-            margin-bottom: 26px;
-            display: flex;
-            align-items: center;
-        }
-
-        .sns-final-card ul {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-        }
-
-        .sns-final-card li {
-            font-size: 15px;
-            line-height: 1.5;
-            margin-bottom: 0;
-        }
-
-        .sns-final-card li::before {
-            color: var(--lime);
-        }
-
-        .sns-final-budget {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 20px;
-            border-color: rgba(36, 130, 255, .9);
-        }
-
-        .sns-final-budget h3 {
-            font-size: 20px;
+        .kakao-card h3 {
+            font-size: 19px;
             margin-bottom: 8px;
         }
 
-        .sns-final-budget p {
-            margin: 0;
-            font-size: 14px;
+        .kakao-card .money {
+            font-size: 38px;
+            margin-bottom: 6px;
         }
 
-        .sns-final-budget .money {
-            font-size: 42px;
-            white-space: nowrap;
+        .kakao-card p {
+            margin: 2px 0;
+            font-size: 13px;
         }
 
-
-        /* 5페이지 레이아웃 재정리: 박스 겹침 방지 */
-        .kakao-clean-slide {
-            padding: 34px 44px;
-        }
-
-        .kakao-clean-layout {
-            height: calc(100% - 104px);
+        .kakao-bottom {
             display: grid;
-            grid-template-rows: 168px 1fr;
+            grid-template-columns: 1.2fr .8fr;
             gap: 16px;
             min-height: 0;
         }
 
-        .kakao-clean-top {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            min-height: 0;
-        }
-
-        .kakao-budget-card {
+        .kakao-tbl-panel {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 20px 22px;
-            overflow: hidden;
-        }
-
-        .kakao-budget-card h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-
-        .kakao-budget-card .money {
-            font-size: 46px;
-            margin-bottom: 10px;
-        }
-
-        .kakao-budget-card p {
-            margin: 3px 0;
-            line-height: 1.45;
-            font-size: 14px;
-        }
-
-        .kakao-clean-bottom {
-            display: grid;
-            grid-template-columns: 1.18fr .82fr;
-            gap: 18px;
             min-height: 0;
         }
 
-        .kakao-data-table,
-        .kakao-chart-panel {
-            min-height: 0;
-            overflow: hidden;
-        }
-
-        .kakao-data-table {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .kakao-data-table h3,
+        .kakao-tbl-panel h3,
         .kakao-chart-panel h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
+            font-size: 15px;
+            margin-bottom: 8px;
         }
 
-        .kakao-data-table table {
+        .kakao-tbl-panel table {
             flex: 1;
             height: 100%;
             font-size: 13px;
         }
 
-        .kakao-data-table th {
-            padding: 10px 12px;
-        }
-
-        .kakao-data-table td {
-            padding: 9px 12px;
+        .kakao-tbl-panel th,
+        .kakao-tbl-panel td {
+            padding: 8px 10px;
         }
 
         .kakao-total-row td {
@@ -1325,6 +862,7 @@
         .kakao-chart-panel {
             display: flex;
             flex-direction: column;
+            min-height: 0;
         }
 
         .kakao-chart-wrap {
@@ -1334,527 +872,643 @@
         }
 
         .kakao-chart-wrap canvas {
+            display: block;
             width: 100% !important;
             height: 100% !important;
-            display: block;
         }
 
+        /* ── 페이지 6 SNS ── */
+        .sns-layout {
+            height: calc(100% - 100px);
+            display: grid;
+            grid-template-rows: 1fr 96px;
+            gap: 14px;
+            min-height: 0;
+        }
 
+        .sns-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            min-height: 0;
+        }
 
+        .sns-card {
+            display: flex;
+            flex-direction: column;
+            padding: 18px;
+            min-height: 0;
+        }
 
-        /* Responsive centered stage: keep the whole 16:9 slide centered */
-        html,
-        body {
-            width: 100%;
+        .sns-card h3 {
+            font-size: 18px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sns-card ul {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .sns-card li {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .sns-budget {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            border-color: rgba(36, 130, 255, .9);
+        }
+
+        .sns-budget h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .sns-budget p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .sns-budget .money {
+            font-size: 36px;
+            white-space: nowrap;
+        }
+
+        /* ── 페이지 7 예산 요약 ── */
+        .budget-grid {
+            height: calc(100% - 100px);
+            display: grid;
+            grid-template-columns: .8fr 1.2fr;
+            gap: 18px;
+            min-height: 0;
+        }
+
+        .budget-left {
+            display: grid;
+            grid-template-rows: 110px 1fr;
+            gap: 14px;
+            min-height: 0;
+        }
+
+        .budget-total {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .budget-total .money {
+            font-size: 46px;
+        }
+
+        .budget-chart-panel {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .budget-chart-panel h3 {
+            margin-bottom: 8px;
+        }
+
+        .budget-canvas-wrap {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+        }
+
+        #budgetChart {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .budget-tbl {
             height: 100%;
+            padding: 16px;
             overflow: hidden;
         }
 
-        body {
-            padding: 0 !important;
+        .budget-tbl table {
+            height: 100%;
+            font-size: 14px;
         }
 
-        .deck {
-            position: fixed !important;
-            left: 50% !important;
-            top: calc(50% - 28px) !important;
-            width: 1280px !important;
-            height: 720px !important;
-            max-width: none !important;
-            margin: 0 !important;
-            transform-origin: center center !important;
+        .budget-tbl th {
+            padding: 12px 13px;
         }
 
-        .slide {
-            width: 1280px !important;
-            height: 720px !important;
-            aspect-ratio: auto !important;
-            margin: 0 !important;
+        .budget-tbl td {
+            padding: 12px 13px;
         }
 
+        /* 네비게이션 */
         .nav {
-            left: 50% !important;
-            bottom: 14px !important;
-            transform: translateX(-50%) !important;
+            position: fixed;
+            left: 50%;
+            bottom: 14px;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: rgba(14, 22, 36, .96);
+            border: 1px solid rgba(77, 143, 255, .55);
+            backdrop-filter: blur(12px);
         }
 
-        @media (max-width: 900px) {
-            .slide {
-                width: 1280px !important;
-                height: 720px !important;
-                min-height: 720px !important;
-                padding: 34px 44px !important;
-            }
+        .nav button {
+            background: transparent;
+            border: 1px solid rgba(72, 126, 205, .55);
+            color: var(--text);
+            border-radius: 6px;
+            padding: 7px 14px;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: "Noto Sans KR", sans-serif;
+        }
 
-            .grid2,
-            .grid3,
-            .kpi {
-                grid-template-columns: inherit;
-            }
+        .nav button:hover {
+            border-color: var(--lime);
+            color: var(--lime);
+        }
 
-            .cover-inner {
-                padding-left: 70px !important;
-            }
+        .count {
+            font-family: "Bebas Neue";
+            font-size: 24px;
+            color: var(--lime);
+            min-width: 58px;
+            text-align: center;
+        }
 
-            .cover h1 {
-                font-size: 78px !important;
-            }
+        .dots {
+            display: flex;
+            gap: 7px;
+        }
 
-            .tennis-scene {
-                opacity: 1 !important;
-                right: 60px !important;
-            }
+        .dots button {
+            width: 7px;
+            height: 7px;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            background: #46536b;
+        }
+
+        .dots button.active {
+            background: var(--lime);
+            transform: scale(1.35);
         }
     </style>
 </head>
 
 <body>
-    <main class="deck">
-        <section class="slide cover active">
-            <div class="cover-inner">
-                <div>
-                    <div class="eyebrow">테니스 용품 전문몰 온라인 마케팅 전략</div>
-                    <h1>한달 광고비 예산 <b>책정 보고서</b></h1>
-                    <div class="rule"></div>
-                    <small>TOTAL MONTHLY BUDGET</small>
-                    <div class="big-money">₩2,100,000</div>
-                    <div class="cover-meta">REPORT DATE: 2026. 05. 20<br>PRESENTED BY: 마케팅 운영팀
-                    </div>
-                </div>
-            </div>
-            <div class="tennis-scene">
-                <div class="court"></div>
-                <div class="splash"></div>
-                <div class="racket">
-                    <div class="racket-head"></div>
-                    <div class="racket-throat"></div>
-                    <div class="racket-handle"></div>
-                </div>
-                <div class="ball main"></div>
-            </div>
-        </section>
+    <!-- 폰트 로딩 후 표시 -->
+    <script>
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () { document.documentElement.classList.add('fonts-ready'); });
+        } else { document.documentElement.classList.add('fonts-ready'); }
+    </script>
 
-        <section class="slide">
-            <h2 class="title kr">광고 집행 개요 및 전략 방향</h2>
-            <p class="subtitle">주요 플랫폼과 SNS를 포함하여 총 210만 원의 예산을 편성하며, 매체별 특성에 따른 효율적인 고객 유입과 브랜드
-                노출을 목표로 합니다.</p>
-            <div class="grid2">
-                <div style="display:grid;gap:12px">
-                    <div class="panel">
-                        <h3>효율적 고객 유입</h3>
-                        <p>네이버 및 구글 검색 광고를 통해 구매 의도가 높은 핵심 키워드 유입을 극대화하고 전환율을 높입니다.</p>
-                    </div>
-                    <div class="panel">
-                        <h3>브랜드 노출 강화</h3>
-                        <p>유튜브 영상 및 카카오 모먼트 광고를 활용하여 타겟 접점에서의 브랜드 인지도를 확산시킵니다.</p>
-                    </div>
-                    <div class="panel">
-                        <h3>데이터 기반 최적화</h3>
-                        <p>SNS 및 당근마켓 소액 테스트를 통해 채널별 효율을 검증하고 향후 예산 재배분 근거를 마련합니다.</p>
-                    </div>
-                </div>
-                <div style="display:grid;gap:12px">
-                    <div class="panel blue">
-                        <h3>네이버 & 구글</h3>
-                        <div class="money">₩1,500,000</div>
-                        <ul class="clean">
-                            <li>네이버 파워링크 & 쇼핑광고 (100만원)</li>
-                            <li>구글 키워드 검색광고 (30만원)</li>
-                            <li>구글 유튜브 영상광고 (20만원)</li>
-                        </ul>
-                    </div>
-                    <div class="panel lime">
-                        <h3>카카오 & SNS 테스트</h3>
-                        <div class="money">₩600,000</div>
-                        <ul class="clean">
-                            <li>카카오 키워드 광고 (20만원)</li>
-                            <li>카카오 모먼트 디스플레이 (30만원)</li>
-                            <li>SNS / 당근마켓 소액 테스트 (10만원)</li>
-                        </ul>
-                    </div>
-                    <div class="panel center">
-                        <h3>총 집행 예산 합계</h3>
-                        <div class="money">₩2,100,000</div>
-                        <p>핵심 광고비 200만원 + 테스트 예산 10만원</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="stage">
+        <main class="deck">
 
-        <section class="slide page-3">
-            <h2 class="title kr animate-rise">네이버 광고 예산 및 키워드 분석</h2>
-            <p class="subtitle animate-rise delay-1">월 100만 원의 예산을 파워링크와 쇼핑광고에 배정하여 핵심 키워드 중심의
-                최적화 운영을 진행합니다.</p>
-            <div class="grid2" style="grid-template-columns:1.35fr .9fr">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>키워드</th>
-                            <th>파워링크</th>
-                            <th>쇼핑탭</th>
-                            <th>예상 클릭수</th>
-                            <th>VAT 포함 비용</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>테니스라켓</td>
-                            <td>₩1,300</td>
-                            <td>₩2,800</td>
-                            <td>1,240</td>
-                            <td>₩1,773,200</td>
-                        </tr>
-                        <tr>
-                            <td>테니스화</td>
-                            <td>₩2,000</td>
-                            <td>₩2,300</td>
-                            <td>529</td>
-                            <td>₩1,163,800</td>
-                        </tr>
-                        <tr>
-                            <td>테니스용품</td>
-                            <td>₩900</td>
-                            <td>-</td>
-                            <td>366</td>
-                            <td>₩362,340</td>
-                        </tr>
-                        <tr>
-                            <td>테니스공</td>
-                            <td>₩1,600</td>
-                            <td>-</td>
-                            <td>109</td>
-                            <td>₩191,840</td>
-                        </tr>
-                        <tr>
-                            <td>스쿼시라켓</td>
-                            <td>₩1,000</td>
-                            <td>-</td>
-                            <td>166</td>
-                            <td>₩182,600</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div>
-                    <div class="panel blue">
-                        <h3>네이버 월간 확정 예산</h3>
-                        <div class="money">1,000,000원</div>
-                        <div class="fill-rail"><span style="--w:76%"></span></div>
-                        <p style="margin-top:10px">키워드별 데이터 시뮬레이션을 기반으로 노출 효율을 극대화합니다.</p>
-                    </div>
-                    <div class="panel chartBox" style="margin-top:12px"><canvas id="naverChart"></canvas></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide page-4 google-plan-slide">
-            <h2 class="title kr in-place">구글 검색 및 유튜브 광고 계획</h2>
-            <p class="subtitle in-place delay-1">검색광고(30만원)와 유튜브 영상광고(20만원)를 통한 퍼포먼스 및 인지도 강화</p>
-
-            <div class="google-layout">
-                <div class="google-left">
-                    <div class="panel performance-panel in-place delay-2">
-                        <h3>📈 검색광고 예상 퍼포먼스 (월 30만원 기준)</h3>
-                        <div class="kpi kpi-wide">
-                            <div class="box metric-fill"><strong>1200%</strong><span>예상
-                                    ROAS</span></div>
-                            <div class="box metric-fill"><strong>5.2%</strong><span>클릭률
-                                    (CTR)</span></div>
-                            <div class="box metric-fill"><strong>370만원</strong><span>예상 전환
-                                    가치</span></div>
-                        </div>
-                    </div>
-
-                    <div class="panel keyword-panel in-place delay-3">
-                        <h3>주요 키워드별 상위 노출 예상가</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>핵심 키워드</th>
-                                    <th>1위 예상 입찰가</th>
-                                    <th>월간 검색량</th>
-                                    <th>운영 전략</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>테니스라켓</td>
-                                    <td>₩2,400</td>
-                                    <td>2,400</td>
-                                    <td>고단가 상품 집중 유입</td>
-                                </tr>
-                                <tr>
-                                    <td>테니스화</td>
-                                    <td>₩3,000</td>
-                                    <td>2,400</td>
-                                    <td>구매 의도 높은 타겟 확보</td>
-                                </tr>
-                                <tr>
-                                    <td>테니스공</td>
-                                    <td>₩700</td>
-                                    <td>2,900</td>
-                                    <td>저단가 대량 구매 유도</td>
-                                </tr>
-                                <tr>
-                                    <td>스쿼시라켓</td>
-                                    <td>₩1,000</td>
-                                    <td>940</td>
-                                    <td>틈새 시장 및 연관 고객 확보</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="panel roas-strip in-place delay-4">
-                        <span>구글 키워드 광고 기대 성과:</span>
-                        <b>ROAS 1,200% 달성 목표</b>
-                    </div>
-                </div>
-
-                <div class="google-right">
-                    <div class="panel youtube-panel in-place delay-2">
-                        <h3>▶ 유튜브 영상 광고 (브랜딩)</h3>
-                        <p>월 20만원 집행예정</p>
-                        <ul class="clean">
-                            <li>테니스 전문몰 브랜드 인지도 확산 및 상품 노출</li>
-                            <li>표준 요금제 적용을 통한 안정적인 도달 범위 확보</li>
-                            <li>영상 시청 데이터 기반 잠재 고객 리마케팅</li>
-                        </ul>
-                    </div>
-
-                    <div class="panel youtube-note in-place delay-3">
-                        ℹ️ 유튜브 캠페인은 초기 인지도 확산을 위해 소액으로 시작하며, 성과 데이터(조회수, 클릭률) 분석 후 예산 증액 여부를 검토합니다.
-                    </div>
-
-                    <div class="panel chartBox mini-chart in-place delay-4">
-                        <canvas id="googleMiniChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide page-5 kakao-clean-slide">
-            <h2 class="title kr">카카오 및 다음 광고 운영 안</h2>
-            <p class="subtitle">키워드 광고 20만 원과 모먼트 광고 30만 원을 편성하여 포털 및 모바일 지면에서 안정적인 노출을 확보합니다.
-            </p>
-
-            <div class="kakao-clean-layout">
-                <div class="kakao-clean-top">
-                    <div class="panel lime kakao-budget-card">
-                        <h3>카카오 키워드 광고</h3>
-                        <div class="money">월 200,000원</div>
-                        <p>다음 포털 및 카카오톡 검색 결과 노출</p>
-                        <p>일 예산 10,000원 기반 핵심 키워드 중심 운영</p>
-                    </div>
-
-                    <div class="panel lime kakao-budget-card">
-                        <h3>카카오 모먼트 광고</h3>
-                        <div class="money">월 300,000원</div>
-                        <p>카카오톡 비즈보드 및 주요 서비스 배너 노출</p>
-                        <p>디스플레이 광고 지면 활용</p>
-                    </div>
-                </div>
-
-                <div class="kakao-clean-bottom">
-                    <div class="panel kakao-data-table">
-                        <h3>📊 지난달(4월) 기준 주요 키워드 집행 데이터</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>키워드</th>
-                                    <th class="right">1위 평균입찰가</th>
-                                    <th class="right">예상 노출수</th>
-                                    <th class="right">VAT 포함 총비용</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>테니스라켓</td>
-                                    <td class="right">₩170</td>
-                                    <td class="right">607</td>
-                                    <td class="right">₩187</td>
-                                </tr>
-                                <tr>
-                                    <td>테니스화</td>
-                                    <td class="right">₩140</td>
-                                    <td class="right">651</td>
-                                    <td class="right">₩1,386</td>
-                                </tr>
-                                <tr>
-                                    <td>테니스공</td>
-                                    <td class="right">₩600</td>
-                                    <td class="right">209</td>
-                                    <td class="right">₩1,980</td>
-                                </tr>
-                                <tr>
-                                    <td>스쿼시라켓</td>
-                                    <td class="right">₩500</td>
-                                    <td class="right">83</td>
-                                    <td class="right">₩550</td>
-                                </tr>
-                                <tr class="kakao-total-row">
-                                    <td><b>종합 예상</b></td>
-                                    <td class="right">-</td>
-                                    <td class="right">-</td>
-                                    <td class="right"><b>₩6,281</b></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="panel kakao-chart-panel">
-                        <h3>키워드별 노출수 / 입찰가 비교</h3>
-                        <div class="kakao-chart-wrap">
-                            <canvas id="kakaoChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide page-6 sns-final-slide">
-            <h2 class="title kr">SNS 및 당근마켓 소액 테스트</h2>
-            <p class="subtitle">지역 기반 및 타겟팅 매체에 10만 원의 테스트 예산을 투입하여 향후 확장 가능성을 검토합니다.</p>
-
-            <div class="sns-final-layout">
-                <div class="sns-final-cards">
-                    <div class="panel sns-final-card">
-                        <h3 class="neon">
-                            <span class="logo-badge instagram" aria-label="Instagram"></span>SNS 타겟팅 광고
-                        </h3>
-                        <ul class="clean">
-                            <li>인스타그램 및 페이스북 통합 광고 운영</li>
-                            <li>테니스 관심사 및 연령대 정밀 타겟팅 설정</li>
-                            <li>비주얼 중심의 콘텐츠로 브랜드 인지도 제고</li>
-                            <li>클릭률 분석을 통한 상품 선호도 파악</li>
-                        </ul>
-                    </div>
-
-                    <div class="panel sns-final-card">
-                        <h3 style="color:var(--orange)">
-                            <span class="logo-badge karrot" aria-label="Karrot">🥕</span>당근마켓 지역 광고
-                        </h3>
-                        <ul class="clean">
-                            <li>매장 인근 및 테니스장 밀집 지역 집중 노출</li>
-                            <li>지역 기반 하이퍼로컬 마케팅</li>
-                            <li>테니스 동호회 및 운동 목적 사용자 타겟팅</li>
-                            <li>신규 매장 방문 및 지역 유입 데이터 확보</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="panel blue sns-final-budget">
+            <!-- 슬라이드 1: 커버 -->
+            <section class="slide cover active">
+                <div class="cover-inner">
                     <div>
-                        <h3>테스트 월 예산</h3>
-                        <p>성과 지표 분석 후 효율이 검증된 매체에 대해 차월부터 예산 비중을 점진적으로 확대합니다.</p>
+                        <div class="eyebrow">테니스 용품 전문몰 온라인 마케팅 전략</div>
+                        <h1>한달 광고비 예산 <b>책정 보고서</b></h1>
+                        <div class="rule"></div>
+                        <small>TOTAL MONTHLY BUDGET</small>
+                        <div class="big-money">₩2,100,000</div>
+                        <div class="cover-meta">REPORT DATE: 2026. 05. 20<br>PRESENTED BY: 마케팅 운영팀</div>
                     </div>
-                    <div class="money">100,000원</div>
                 </div>
-            </div>
-        </section>
-
-        <section class="slide page-7 budget-fit-slide">
-            <h2 class="title kr animate-rise">월 광고비 예산 종합 요약</h2>
-            <p class="subtitle animate-rise delay-1">네이버 100만 원, 구글 50만 원, 카카오 50만 원, 테스트 10만 원 등
-                총 210만 원의 플랫폼별 상세 예산 배분 내역입니다.</p>
-
-            <div class="budget-fit-grid">
-                <div class="budget-fit-left">
-                    <div class="panel lime budget-total-fit">
-                        <h3>한달 총 광고 집행 예산</h3>
-                        <div class="money">2,100,000원</div>
-                        <div class="fill-rail"><span style="--w:100%"></span></div>
+                <div class="tennis-scene">
+                    <div class="court"></div>
+                    <div class="splash"></div>
+                    <div class="racket">
+                        <div class="racket-head"></div>
+                        <div class="racket-throat"></div>
+                        <div class="racket-handle"></div>
                     </div>
+                    <div class="ball main"></div>
+                </div>
+            </section>
 
-                    <div class="panel chartBox budget-chart-fit">
-                        <h3>플랫폼별 예산 비중</h3>
-                        <div class="budget-chart-canvas-wrap">
-                            <canvas id="budgetChart"></canvas>
+            <!-- 슬라이드 2: 개요 -->
+            <section class="slide">
+                <h2 class="title kr">광고 집행 개요 및 전략 방향</h2>
+                <p class="subtitle">주요 플랫폼과 SNS를 포함하여 총 210만 원의 예산을 편성하며, 매체별 특성에 따른 효율적인 고객 유입과 브랜드 노출을 목표로 합니다.</p>
+                <div class="grid2">
+                    <div style="display:grid;gap:12px">
+                        <div class="panel">
+                            <h3>효율적 고객 유입</h3>
+                            <p>네이버 및 구글 검색 광고를 통해 구매 의도가 높은 핵심 키워드 유입을 극대화하고 전환율을 높입니다.</p>
+                        </div>
+                        <div class="panel">
+                            <h3>브랜드 노출 강화</h3>
+                            <p>유튜브 영상 및 카카오 모먼트 광고를 활용하여 타겟 접점에서의 브랜드 인지도를 확산시킵니다.</p>
+                        </div>
+                        <div class="panel">
+                            <h3>데이터 기반 최적화</h3>
+                            <p>SNS 및 당근마켓 소액 테스트를 통해 채널별 효율을 검증하고 향후 예산 재배분 근거를 마련합니다.</p>
+                        </div>
+                    </div>
+                    <div style="display:grid;gap:12px">
+                        <div class="panel blue">
+                            <h3>네이버 &amp; 구글</h3>
+                            <div class="money">₩1,500,000</div>
+                            <ul class="clean">
+                                <li>네이버 파워링크 &amp; 쇼핑광고 (100만원)</li>
+                                <li>구글 키워드 검색광고 (30만원)</li>
+                                <li>구글 유튜브 영상광고 (20만원)</li>
+                            </ul>
+                        </div>
+                        <div class="panel lime">
+                            <h3>카카오 &amp; SNS 테스트</h3>
+                            <div class="money">₩600,000</div>
+                            <ul class="clean">
+                                <li>카카오 키워드 광고 (20만원)</li>
+                                <li>카카오 모먼트 디스플레이 (30만원)</li>
+                                <li>SNS / 당근마켓 소액 테스트 (10만원)</li>
+                            </ul>
+                        </div>
+                        <div class="panel center">
+                            <h3>총 집행 예산 합계</h3>
+                            <div class="money">₩2,100,000</div>
+                            <p>핵심 광고비 200만원 + 테스트 예산 10만원</p>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="panel budget-table-fit">
-                    <table>
+            <!-- 슬라이드 3: 네이버 -->
+            <section class="slide">
+                <h2 class="title kr animate-rise">네이버 광고 예산 및 키워드 분석</h2>
+                <p class="subtitle animate-rise delay-1">월 100만 원의 예산을 파워링크와 쇼핑광고에 배정하여 핵심 키워드 중심의 최적화 운영을 진행합니다.</p>
+                <div style="display:grid;grid-template-columns:1.35fr .9fr;gap:16px;height:calc(100% - 100px);">
+                    <table style="height:100%;font-size:14px;">
                         <thead>
                             <tr>
-                                <th>플랫폼</th>
-                                <th>광고 종류</th>
-                                <th>일 예산</th>
-                                <th class="right">월 예산</th>
+                                <th>키워드</th>
+                                <th>파워링크</th>
+                                <th>쇼핑탭</th>
+                                <th>예상 클릭수</th>
+                                <th>VAT 포함 비용</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>네이버</td>
-                                <td>키워드 + 쇼핑광고</td>
-                                <td>약 3.3만원</td>
-                                <td class="right">1,000,000원</td>
+                                <td>테니스라켓</td>
+                                <td>₩1,300</td>
+                                <td>₩2,800</td>
+                                <td>1,240</td>
+                                <td>₩1,773,200</td>
                             </tr>
                             <tr>
-                                <td>구글</td>
-                                <td>검색 + 유튜브 영상</td>
-                                <td>약 1.6만원</td>
-                                <td class="right">500,000원</td>
+                                <td>테니스화</td>
+                                <td>₩2,000</td>
+                                <td>₩2,300</td>
+                                <td>529</td>
+                                <td>₩1,163,800</td>
                             </tr>
                             <tr>
-                                <td>카카오</td>
-                                <td>키워드 + 모먼트</td>
-                                <td>약 1.6만원</td>
-                                <td class="right">500,000원</td>
-                            </tr>
-                            <tr>
-                                <td>SNS/당근</td>
-                                <td>소액 테스트</td>
+                                <td>테니스용품</td>
+                                <td>₩900</td>
                                 <td>-</td>
-                                <td class="right">100,000원</td>
+                                <td>366</td>
+                                <td>₩362,340</td>
                             </tr>
                             <tr>
-                                <td colspan="3"><b>합계</b></td>
-                                <td class="right"><b>2,100,000원</b></td>
+                                <td>테니스공</td>
+                                <td>₩1,600</td>
+                                <td>-</td>
+                                <td>109</td>
+                                <td>₩191,840</td>
+                            </tr>
+                            <tr>
+                                <td>스쿼시라켓</td>
+                                <td>₩1,000</td>
+                                <td>-</td>
+                                <td>166</td>
+                                <td>₩182,600</td>
                             </tr>
                         </tbody>
                     </table>
+                    <div style="display:grid;grid-template-rows:auto 1fr;gap:14px;min-height:0;">
+                        <div class="panel blue">
+                            <h3>네이버 월간 확정 예산</h3>
+                            <div class="money">1,000,000원</div>
+                            <div class="fill-rail"><span style="--w:76%"></span></div>
+                            <p style="margin-top:10px">키워드별 시뮬레이션 기반 노출 효율을 극대화합니다.</p>
+                        </div>
+                        <div class="panel chartBox" style="height:auto;"><canvas id="naverChart"></canvas></div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class="slide">
-            <h2 class="title kr">운영 방향 및 향후 추진 계획</h2>
-            <p class="subtitle">파워콘텐츠 연동 및 키워드 최적화 작업을 지속하며, 차주 최종 회의를 통해 세부 집행 계획을 확정합니다.</p>
-            <div class="grid3">
-                <div class="panel">
-                    <h3>콘텐츠 및 키워드 최적화</h3>
-                    <ul class="clean">
-                        <li>파워콘텐츠 광고 진행</li>
-                        <li>키워드 입찰가 상시 조정</li>
-                        <li>부정 클릭 방지 및 타겟팅 정교화</li>
-                    </ul>
+            <!-- 슬라이드 4: 구글 -->
+            <section class="slide">
+                <h2 class="title kr in-place">구글 검색 및 유튜브 광고 계획</h2>
+                <p class="subtitle in-place delay-1">검색광고(30만원)와 유튜브 영상광고(20만원)를 통한 퍼포먼스 및 인지도 강화</p>
+                <div class="google-layout">
+                    <div class="google-left">
+                        <div class="panel in-place delay-2">
+                            <h3>📈 검색광고 예상 퍼포먼스 (월 30만원 기준)</h3>
+                            <div class="kpi" style="grid-template-columns:repeat(3,1fr);">
+                                <div class="box metric-fill"><strong>1200%</strong><span>예상 ROAS</span></div>
+                                <div class="box metric-fill"><strong>5.2%</strong><span>클릭률 (CTR)</span></div>
+                                <div class="box metric-fill"><strong>370만원</strong><span>예상 전환 가치</span></div>
+                            </div>
+                        </div>
+                        <div class="panel in-place delay-3">
+                            <h3>주요 키워드별 상위 노출 예상가</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>핵심 키워드</th>
+                                        <th>1위 예상 입찰가</th>
+                                        <th>월간 검색량</th>
+                                        <th>운영 전략</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>테니스라켓</td>
+                                        <td>₩2,400</td>
+                                        <td>2,400</td>
+                                        <td>고단가 상품 집중 유입</td>
+                                    </tr>
+                                    <tr>
+                                        <td>테니스화</td>
+                                        <td>₩3,000</td>
+                                        <td>2,400</td>
+                                        <td>구매 의도 높은 타겟 확보</td>
+                                    </tr>
+                                    <tr>
+                                        <td>테니스공</td>
+                                        <td>₩700</td>
+                                        <td>2,900</td>
+                                        <td>저단가 대량 구매 유도</td>
+                                    </tr>
+                                    <tr>
+                                        <td>스쿼시라켓</td>
+                                        <td>₩1,000</td>
+                                        <td>940</td>
+                                        <td>틈새 시장 및 연관 고객 확보</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel roas-strip in-place delay-4">
+                            <span>구글 키워드 광고 기대 성과:</span>
+                            <b>ROAS 1,200% 달성 목표</b>
+                        </div>
+                    </div>
+                    <div class="google-right">
+                        <div class="panel youtube-panel in-place delay-2">
+                            <h3>▶ 유튜브 영상 광고 (브랜딩)</h3>
+                            <p>월 20만원 집행예정</p>
+                            <ul class="clean">
+                                <li>테니스 전문몰 브랜드 인지도 확산 및 상품 노출</li>
+                                <li>표준 요금제 적용을 통한 안정적인 도달 범위 확보</li>
+                                <li>영상 시청 데이터 기반 잠재 고객 리마케팅</li>
+                            </ul>
+                        </div>
+                        <div class="panel in-place delay-3" style="font-size:14px;color:var(--sub);line-height:1.65;">
+                            ℹ️ 유튜브 캠페인은 초기 인지도 확산을 위해 소액으로 시작하며, 성과 데이터(조회수, 클릭률) 분석 후 예산 증액 여부를 검토합니다.
+                        </div>
+                        <div class="panel chartBox mini-chart in-place delay-4"><canvas id="googleMiniChart"></canvas>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel">
-                    <h3>성과 모니터링 및 확장</h3>
-                    <ul class="clean">
-                        <li>유튜브 캠페인 데이터 수집</li>
-                        <li>매체별 ROAS 분석</li>
-                        <li>효율 높은 시간대 집중 노출</li>
-                    </ul>
+            </section>
+
+            <!-- 슬라이드 5: 카카오 -->
+            <section class="slide">
+                <h2 class="title kr">카카오 및 다음 광고 운영 안</h2>
+                <p class="subtitle">키워드 광고 20만 원과 모먼트 광고 30만 원을 편성하여 포털 및 모바일 지면에서 안정적인 노출을 확보합니다.</p>
+                <div class="kakao-layout">
+                    <div class="kakao-top">
+                        <div class="panel lime kakao-card">
+                            <h3>카카오 키워드 광고</h3>
+                            <div class="money">월 200,000원</div>
+                            <p>다음 포털 및 카카오톡 검색 결과 노출</p>
+                            <p>일 예산 10,000원 기반 핵심 키워드 중심 운영</p>
+                        </div>
+                        <div class="panel lime kakao-card">
+                            <h3>카카오 모먼트 광고</h3>
+                            <div class="money">월 300,000원</div>
+                            <p>카카오톡 비즈보드 및 주요 서비스 배너 노출</p>
+                            <p>디스플레이 광고 지면 활용</p>
+                        </div>
+                    </div>
+                    <div class="kakao-bottom">
+                        <div class="panel kakao-tbl-panel">
+                            <h3>📊 지난달(4월) 기준 주요 키워드 집행 데이터</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>키워드</th>
+                                        <th class="right">1위 평균입찰가</th>
+                                        <th class="right">예상 노출수</th>
+                                        <th class="right">VAT 포함 총비용</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>테니스라켓</td>
+                                        <td class="right">₩170</td>
+                                        <td class="right">607</td>
+                                        <td class="right">₩103,390</td>
+                                    </tr>
+                                    <tr>
+                                        <td>테니스화</td>
+                                        <td class="right">₩140</td>
+                                        <td class="right">651</td>
+                                        <td class="right">₩91,140</td>
+                                    </tr>
+                                    <tr>
+                                        <td>테니스공</td>
+                                        <td class="right">₩600</td>
+                                        <td class="right">209</td>
+                                        <td class="right">₩125,400</td>
+                                    </tr>
+                                    <tr>
+                                        <td>스쿼시라켓</td>
+                                        <td class="right">₩500</td>
+                                        <td class="right">83</td>
+                                        <td class="right">₩41,500</td>
+                                    </tr>
+                                    <tr class="kakao-total-row">
+                                        <td><b>합계 예상</b></td>
+                                        <td class="right">-</td>
+                                        <td class="right">1,550</td>
+                                        <td class="right"><b>₩361,430</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel kakao-chart-panel">
+                            <h3>키워드별 노출수 / 입찰가 비교</h3>
+                            <div class="kakao-chart-wrap"><canvas id="kakaoChart"></canvas></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel">
-                    <h3>최종 확정 및 광고 개시</h3>
-                    <ul class="clean">
-                        <li>경영진 최종 집행 계획 확정</li>
-                        <li>광고 소재 세팅 작업</li>
-                        <li>스마트스토어 개설 작업</li>
-                    </ul>
+            </section>
+
+            <!-- 슬라이드 6: SNS -->
+            <section class="slide">
+                <h2 class="title kr">SNS 및 당근마켓 소액 테스트</h2>
+                <p class="subtitle">지역 기반 및 타겟팅 매체에 10만 원의 테스트 예산을 투입하여 향후 확장 가능성을 검토합니다.</p>
+                <div class="sns-layout">
+                    <div class="sns-cards">
+                        <div class="panel sns-card">
+                            <h3 class="neon"><span class="logo-badge instagram" aria-label="Instagram"></span>SNS 타겟팅 광고
+                            </h3>
+                            <ul class="clean">
+                                <li>인스타그램 및 페이스북 통합 광고 운영</li>
+                                <li>테니스 관심사 및 연령대 정밀 타겟팅 설정</li>
+                                <li>비주얼 중심의 콘텐츠로 브랜드 인지도 제고</li>
+                                <li>클릭률 분석을 통한 상품 선호도 파악</li>
+                            </ul>
+                        </div>
+                        <div class="panel sns-card">
+                            <h3 style="color:var(--orange)"><span class="logo-badge karrot"
+                                    aria-label="Karrot">🥕</span>당근마켓 지역 광고</h3>
+                            <ul class="clean">
+                                <li>매장 인근 및 테니스장 밀집 지역 집중 노출</li>
+                                <li>지역 기반 하이퍼로컬 마케팅</li>
+                                <li>테니스 동호회 및 운동 목적 사용자 타겟팅</li>
+                                <li>신규 매장 방문 및 지역 유입 데이터 확보</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel blue sns-budget">
+                        <div>
+                            <h3>테스트 월 예산</h3>
+                            <p>성과 지표 분석 후 효율이 검증된 매체에 대해 차월부터 예산 비중을 점진적으로 확대합니다.</p>
+                        </div>
+                        <div class="money">100,000원</div>
+                    </div>
                 </div>
-            </div>
-            <div class="final-splash"></div>
-            <div class="final-ball"></div>
-            <div class="panel"
-                style="position:absolute;left:70px;right:350px;bottom:72px;font-size:25px;font-weight:900;line-height:1.55">
-                총 예산 210만 원의 전략적 집행을 통해<br>테니스 전문몰의 <span class="neon">브랜드 인지도</span>를
-                올려<br><span class="neon">매출</span>을 올리겠습니다.</div>
-        </section>
-    </main>
+            </section>
+
+            <!-- 슬라이드 7: 예산 요약 -->
+            <section class="slide">
+                <h2 class="title kr animate-rise">월 광고비 예산 종합 요약</h2>
+                <p class="subtitle animate-rise delay-1">네이버 100만 원, 구글 50만 원, 카카오 50만 원, 테스트 10만 원 등 총 210만 원의 플랫폼별 상세
+                    예산 배분 내역입니다.</p>
+                <div class="budget-grid">
+                    <div class="budget-left">
+                        <div class="panel lime budget-total">
+                            <h3>한달 총 광고 집행 예산</h3>
+                            <div class="money">2,100,000원</div>
+                            <div class="fill-rail"><span style="--w:100%"></span></div>
+                        </div>
+                        <div class="panel budget-chart-panel">
+                            <h3>플랫폼별 예산 비중</h3>
+                            <div class="budget-canvas-wrap"><canvas id="budgetChart"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="panel budget-tbl">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>플랫폼</th>
+                                    <th>광고 종류</th>
+                                    <th>일 예산</th>
+                                    <th class="right">월 예산</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>네이버</td>
+                                    <td>키워드 + 쇼핑광고</td>
+                                    <td>약 3.3만원</td>
+                                    <td class="right">1,000,000원</td>
+                                </tr>
+                                <tr>
+                                    <td>구글</td>
+                                    <td>검색 + 유튜브 영상</td>
+                                    <td>약 1.6만원</td>
+                                    <td class="right">500,000원</td>
+                                </tr>
+                                <tr>
+                                    <td>카카오</td>
+                                    <td>키워드 + 모먼트</td>
+                                    <td>약 1.6만원</td>
+                                    <td class="right">500,000원</td>
+                                </tr>
+                                <tr>
+                                    <td>SNS/당근</td>
+                                    <td>소액 테스트</td>
+                                    <td>-</td>
+                                    <td class="right">100,000원</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><b>합계</b></td>
+                                    <td class="right"><b>2,100,000원</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 슬라이드 8: 향후 계획 -->
+            <section class="slide">
+                <h2 class="title kr">운영 방향 및 향후 추진 계획</h2>
+                <p class="subtitle">파워콘텐츠 연동 및 키워드 최적화 작업을 지속하며, 차주 최종 회의를 통해 세부 집행 계획을 확정합니다.</p>
+                <div class="grid3">
+                    <div class="panel">
+                        <h3>콘텐츠 및 키워드 최적화</h3>
+                        <ul class="clean">
+                            <li>파워콘텐츠 광고 진행</li>
+                            <li>키워드 입찰가 상시 조정</li>
+                            <li>부정 클릭 방지 및 타겟팅 정교화</li>
+                        </ul>
+                    </div>
+                    <div class="panel">
+                        <h3>성과 모니터링 및 확장</h3>
+                        <ul class="clean">
+                            <li>유튜브 캠페인 데이터 수집</li>
+                            <li>매체별 ROAS 분석</li>
+                            <li>효율 높은 시간대 집중 노출</li>
+                        </ul>
+                    </div>
+                    <div class="panel">
+                        <h3>최종 확정 및 광고 개시</h3>
+                        <ul class="clean">
+                            <li>경영진 최종 집행 계획 확정</li>
+                            <li>광고 소재 세팅 작업</li>
+                            <li>스마트스토어 개설 작업</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="final-splash"></div>
+                <div class="final-ball"></div>
+                <div class="panel"
+                    style="position:absolute;left:70px;right:350px;bottom:72px;font-size:24px;font-weight:900;line-height:1.6;">
+                    총 예산 210만 원의 전략적 집행을 통해<br>
+                    테니스 전문몰의 <span class="neon">브랜드 인지도</span>를 올려<br>
+                    <span class="neon">매출</span>을 올리겠습니다.
+                </div>
+            </section>
+
+        </main>
+    </div>
 
     <nav class="nav">
         <button id="prevBtn">← 이전</button>
@@ -1864,199 +1518,72 @@
     </nav>
 
     <script>
-        const slides = [...document.querySelectorAll('.slide')];
-        const dots = document.getElementById('dots');
-        const count = document.getElementById('count');
-        let current = 0, chartReady = false;
-        let naverPieChart = null, budgetPieChart = null;
-        slides.forEach((_, i) => { const b = document.createElement('button'); b.type = 'button'; b.onclick = () => show(i); dots.appendChild(b) });
-        document.getElementById('prevBtn').onclick = () => show(current - 1);
-        document.getElementById('nextBtn').onclick = () => show(current + 1);
-        function show(i) {
-            current = (i + slides.length) % slides.length;
-            slides.forEach((s, n) => s.classList.toggle('active', n === current));
-            [...dots.children].forEach((d, n) => d.classList.toggle('active', n === current));
-            count.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+        (function () {
+            'use strict';
+            const slides = [...document.querySelectorAll('.slide')];
+            const dotsEl = document.getElementById('dots');
+            const countEl = document.getElementById('count');
+            const TOTAL = slides.length;
+            let cur = 0, chartsInited = false;
+            const charts = {};
 
-            if (!chartReady) {
-                initCharts();
+            slides.forEach((_, i) => { const b = document.createElement('button'); b.type = 'button'; b.onclick = () => show(i); dotsEl.appendChild(b); });
+            document.getElementById('prevBtn').onclick = () => show(cur - 1);
+            document.getElementById('nextBtn').onclick = () => show(cur + 1);
+            document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowDown') show(cur + 1); if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') show(cur - 1); });
+
+            function show(i) {
+                cur = ((i % TOTAL) + TOTAL) % TOTAL;
+                slides.forEach((s, n) => s.classList.toggle('active', n === cur));
+                [...dotsEl.children].forEach((d, n) => d.classList.toggle('active', n === cur));
+                countEl.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(TOTAL).padStart(2, '0');
+                if (!chartsInited && window.Chart) { initCharts(); chartsInited = true; }
+                // 파이차트 재애니메이션
+                setTimeout(() => {
+                    if (cur === 2 && charts.naver) { charts.naver.reset(); charts.naver.update(); }
+                    if (cur === 6 && charts.budget) { charts.budget.reset(); charts.budget.update(); }
+                }, 60);
+                fitDeck();
             }
 
-            setTimeout(() => {
-                if (current === 2 && naverPieChart) {
-                    naverPieChart.reset();
-                    naverPieChart.update();
-                }
-                if (current === 6 && budgetPieChart) {
-                    budgetPieChart.reset();
-                    budgetPieChart.update();
-                }
-            }, 80);
-        }
-        function initCharts() {
-            if (!window.Chart) return; chartReady = true;
-            Chart.defaults.color = '#b7c4d8'; Chart.defaults.font.family = '"Noto Sans KR", sans-serif';
-            const grid = 'rgba(183,196,216,.14)';
-            naverPieChart = new Chart(naverChart, {
-                type: 'pie',
-                data: {
-                    labels: ['테니스라켓', '테니스화', '테니스용품', '테니스공', '스쿼시'],
-                    datasets: [{
-                        data: [1773200, 1163800, 362340, 191840, 182600],
-                        backgroundColor: ['#03C75B', '#4285F4', '#f9e000', '#FF9800', '#9C27B0'],
-                        borderColor: '#141F30',
-                        borderWidth: 1,
-                        hoverOffset: 16
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        animateRotate: true,
-                        animateScale: true,
-                        duration: 1300,
-                        easing: 'easeOutQuart'
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                color: '#b7c4d8',
-                                boxWidth: 12,
-                                padding: 12,
-                                usePointStyle: true,
-                                pointStyle: 'circle'
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (c) {
-                                    const total = c.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percent = ((c.raw / total) * 100).toFixed(1);
-                                    return `${c.label}: ${c.raw.toLocaleString('ko-KR')}원 (${percent}%)`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            if (document.getElementById('googleChart')) new Chart(googleChart, { type: 'bar', data: { labels: ['라켓', '테니스화', '테니스공', '스쿼시'], datasets: [{ label: '검색량', data: [2400, 2400, 2900, 940], backgroundColor: '#2482ff', borderRadius: 8 }, { label: '입찰가', data: [2400, 3000, 700, 1000], backgroundColor: '#c9ff00', borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1000, easing: 'easeOutQuart' }, animations: { y: { from: 0 } }, plugins: { legend: { position: 'bottom' } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: grid } } } } });
-            new Chart(kakaoChart, { type: 'radar', data: { labels: ['라켓', '테니스화', '테니스공', '스쿼시'], datasets: [{ label: '노출수', data: [607, 651, 209, 83], backgroundColor: 'rgba(36,130,255,.25)', borderColor: '#2482ff', pointBackgroundColor: '#c9ff00' }, { label: '입찰가', data: [170, 140, 600, 500], backgroundColor: 'rgba(201,255,0,.18)', borderColor: '#c9ff00', pointBackgroundColor: '#2482ff' }] }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1100, easing: 'easeOutQuart' }, plugins: { legend: { position: 'bottom' } }, scales: { r: { grid: { color: grid }, angleLines: { color: grid } } } } });
+            function initCharts() {
+                Chart.defaults.color = '#b7c4d8';
+                Chart.defaults.font.family = '"Noto Sans KR",sans-serif';
+                const grid = 'rgba(183,196,216,.14)';
 
-            const mini = document.getElementById('googleMiniChart');
-            if (mini) {
-                new Chart(mini, {
-                    type: 'bar',
-                    data: {
-                        labels: ['ROAS', 'CTR', '전환가치'],
-                        datasets: [{
-                            label: '예상 성과',
-                            data: [1200, 520, 370],
-                            backgroundColor: ['#c9ff00', '#2482ff', '#35d8ff'],
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: { duration: 900, easing: 'easeOutQuart' },
-                        animations: { y: { from: 0 } },
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { grid: { display: false }, ticks: { color: '#b7c4d8' } },
-                            y: { beginAtZero: true, grid: { color: grid }, ticks: { display: false } }
-                        }
-                    }
-                });
+                // 네이버 파이
+                const nEl = document.getElementById('naverChart');
+                if (nEl) charts.naver = new Chart(nEl, { type: 'pie', data: { labels: ['테니스라켓', '테니스화', '테니스용품', '테니스공', '스쿼시'], datasets: [{ data: [1773200, 1163800, 362340, 191840, 182600], backgroundColor: ['#03C75B', '#4285F4', '#f9e000', '#FF9800', '#9C27B0'], borderColor: '#141F30', borderWidth: 1, hoverOffset: 14 }] }, options: { responsive: true, maintainAspectRatio: false, animation: { animateRotate: true, animateScale: true, duration: 1200, easing: 'easeOutQuart' }, plugins: { legend: { position: 'right', labels: { color: '#b7c4d8', boxWidth: 11, padding: 10, usePointStyle: true, pointStyle: 'circle' } }, tooltip: { callbacks: { label(c) { const t = c.dataset.data.reduce((a, b) => a + b, 0); return c.label + ': ' + c.raw.toLocaleString('ko-KR') + '원 (' + (c.raw / t * 100).toFixed(1) + '%)'; } } } } } });
+
+                // 구글 미니
+                const gEl = document.getElementById('googleMiniChart');
+                if (gEl) charts.google = new Chart(gEl, { type: 'bar', data: { labels: ['ROAS', 'CTR', '전환가치'], datasets: [{ data: [1200, 520, 370], backgroundColor: ['#c9ff00', '#2482ff', '#35d8ff'], borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 900 }, animations: { y: { from: 0 } }, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#b7c4d8', font: { size: 12 } } }, y: { beginAtZero: true, grid: { color: grid }, ticks: { display: false } } } } });
+
+                // 카카오 레이더
+                const kEl = document.getElementById('kakaoChart');
+                if (kEl) charts.kakao = new Chart(kEl, { type: 'radar', data: { labels: ['라켓', '테니스화', '테니스공', '스쿼시'], datasets: [{ label: '노출수', data: [607, 651, 209, 83], backgroundColor: 'rgba(36,130,255,.25)', borderColor: '#2482ff', pointBackgroundColor: '#c9ff00' }, { label: '입찰가', data: [170, 140, 600, 500], backgroundColor: 'rgba(201,255,0,.18)', borderColor: '#c9ff00', pointBackgroundColor: '#2482ff' }] }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1100 }, plugins: { legend: { position: 'bottom' } }, scales: { r: { grid: { color: grid }, angleLines: { color: grid }, ticks: { color: '#b7c4d8', font: { size: 11 } } } } } });
+
+                // 예산 파이
+                const bEl = document.getElementById('budgetChart');
+                if (bEl) {
+                    const bc = ['#03C75B', '#DB4437', '#f9e000', '#4285F4'];
+                    charts.budget = new Chart(bEl, { type: 'pie', data: { labels: ['네이버', '구글', '카카오', 'SNS/당근'], datasets: [{ data: [1000000, 500000, 500000, 100000], backgroundColor: [...bc], borderColor: '#141F30', borderWidth: 1, hoverOffset: 16 }] }, options: { responsive: true, maintainAspectRatio: false, animation: { animateRotate: true, animateScale: false, duration: 900, easing: 'easeOutQuart' }, plugins: { legend: { position: 'bottom', labels: { color: '#b7c4d8', boxWidth: 11, padding: 12, usePointStyle: true, pointStyle: 'circle' }, onHover(e, item, legend) { const c = legend.chart.data.datasets[0].backgroundColor; c.forEach((_, i) => { c[i] = i === item.index ? bc[i] : bc[i] + '4D'; }); legend.chart.update(); }, onLeave(e, item, legend) { const c = legend.chart.data.datasets[0].backgroundColor; c.forEach((_, i) => { c[i] = bc[i]; }); legend.chart.update(); } }, tooltip: { callbacks: { label(c) { const t = c.dataset.data.reduce((a, b) => a + b, 0); return c.label + ': ' + c.raw.toLocaleString('ko-KR') + '원 (' + (c.raw / t * 100).toFixed(1) + '%)'; } } } } } });
+                }
             }
 
-            const budgetColors = ['#03C75B', '#DB4437', '#f9e000', '#4285F4'];
-
-            function handleBudgetLegendHover(evt, item, legend) {
-                const colors = legend.chart.data.datasets[0].backgroundColor;
-                colors.forEach((color, index) => {
-                    colors[index] = index === item.index ? budgetColors[index] : budgetColors[index] + '4D';
-                });
-                legend.chart.update();
-            }
-
-            function handleBudgetLegendLeave(evt, item, legend) {
-                const colors = legend.chart.data.datasets[0].backgroundColor;
-                colors.forEach((_, index) => {
-                    colors[index] = budgetColors[index];
-                });
-                legend.chart.update();
-            }
-
-            budgetPieChart = new Chart(budgetChart, {
-                type: 'pie',
-                data: {
-                    labels: ['네이버', '구글', '카카오', 'SNS/당근'],
-                    datasets: [{
-                        data: [1000000, 500000, 500000, 100000],
-                        backgroundColor: [...budgetColors],
-                        borderColor: '#141F30',
-                        borderWidth: 1,
-                        hoverOffset: 18
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        animateRotate: true,
-                        animateScale: false,
-                        duration: 900,
-                        easing: 'easeOutQuart'
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            onHover: handleBudgetLegendHover,
-                            onLeave: handleBudgetLegendLeave,
-                            labels: {
-                                color: '#b7c4d8',
-                                boxWidth: 12,
-                                padding: 14,
-                                usePointStyle: true,
-                                pointStyle: 'circle'
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (c) {
-                                    const total = c.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percent = ((c.raw / total) * 100).toFixed(1);
-                                    return `${c.label}: ${c.raw.toLocaleString('ko-KR')}원 (${percent}%)`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        show(0);
-
-
-        function fitDeckToWindow() {
+            // 반응형 스케일
             const deck = document.querySelector('.deck');
-            if (!deck) return;
+            function fitDeck() {
+                if (!deck) return;
+                const scale = Math.min(window.innerWidth / 1280, (window.innerHeight - 60) / 720, 1);
+                deck.style.transform = 'scale(' + scale + ')';
+            }
+            window.addEventListener('resize', fitDeck);
+            window.addEventListener('orientationchange', () => setTimeout(fitDeck, 200));
 
-            const baseW = 1280;
-            const baseH = 720;
-            const navReserve = 84;
-            const availableW = window.innerWidth;
-            const availableH = window.innerHeight - navReserve;
-
-            const scale = Math.min(availableW / baseW, availableH / baseH, 1);
-            deck.style.transform = `translate(-50%, -50%) scale(${scale})`;
-        }
-
-        window.addEventListener('resize', fitDeckToWindow);
-        window.addEventListener('orientationchange', fitDeckToWindow);
-        fitDeckToWindow();
-
+            fitDeck();
+            show(0);
+        })();
     </script>
 </body>
 
