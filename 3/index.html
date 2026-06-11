@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>네이버 광고 성과 분석 보고서 | 2025년 4월 → 5월</title>
+    <style>
+        :root {
+            --bg0: #070b14;
+            --bg1: #0d1324;
+            --bg2: #111a2e;
+            --card: #151f35;
+            --card2: #101827;
+            --line: #2a3858;
+            --text: #f6f8ff;
+            --muted: #aab6d3;
+            --blue: #4ea1ff;
+            --cyan: #35d0ff;
+            --green: #40d394;
+            --red: #ff6b7a;
+            --yellow: #ffc857;
+            --purple: #a78bfa;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg0);
+            font-family: Segoe UI, Apple SD Gothic Neo, Malgun Gothic, Arial, sans-serif;
+            color: var(--text)
+        }
+
+        .deck {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative
+        }
+
+        .slides {
+            display: flex;
+            height: 100%;
+            transition: transform .48s cubic-bezier(.2, .8, .2, 1)
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            flex: 0 0 100vw;
+            padding: 54px 66px 58px;
+            position: relative;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(78, 161, 255, .24), transparent 30%),
+                radial-gradient(circle at 88% 18%, rgba(53, 208, 255, .14), transparent 26%),
+                linear-gradient(135deg, var(--bg1), var(--bg2) 58%, #08111f);
+        }
+
+        .slide:after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .45), transparent 70%);
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column
+        }
+
+        .eyebrow {
+            font-size: 15px;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            font-weight: 800;
+            margin-bottom: 14px
+        }
+
+        h1 {
+            font-size: 58px;
+            line-height: 1.12;
+            margin: 0 0 18px;
+            font-weight: 900;
+            letter-spacing: -.04em
+        }
+
+        h2 {
+            font-size: 38px;
+            line-height: 1.18;
+            margin: 0 0 26px;
+            font-weight: 900;
+            letter-spacing: -.025em
+        }
+
+        h3 {
+            font-size: 24px;
+            margin: 0 0 14px;
+            color: #d9e7ff
+        }
+
+        p {
+            font-size: 21px;
+            line-height: 1.62;
+            color: #dbe5fb;
+            margin: 0 0 14px
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 22px
+        }
+
+        li {
+            font-size: 21px;
+            line-height: 1.65;
+            color: #e9efff;
+            margin: 8px 0
+        }
+
+        .sub {
+            color: var(--muted);
+            font-size: 22px
+        }
+
+        .grid {
+            display: grid;
+            gap: 18px
+        }
+
+        .cols2 {
+            grid-template-columns: 1fr 1fr
+        }
+
+        .cols3 {
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        .cols4 {
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .035));
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 16px 55px rgba(0, 0, 0, .25);
+        }
+
+        .kpi {
+            min-height: 145px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between
+        }
+
+        .kpi .label {
+            font-size: 17px;
+            color: var(--muted);
+            font-weight: 700
+        }
+
+        .kpi .num {
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: -.03em
+        }
+
+        .kpi .delta {
+            font-size: 18px;
+            font-weight: 800
+        }
+
+        .good {
+            color: var(--green)
+        }
+
+        .bad {
+            color: var(--red)
+        }
+
+        .warn {
+            color: var(--yellow)
+        }
+
+        .blue {
+            color: var(--blue)
+        }
+
+        .cyan {
+            color: var(--cyan)
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 9px;
+            font-size: 18px
+        }
+
+        .table th {
+            color: var(--muted);
+            font-size: 15px;
+            text-align: left;
+            padding: 0 14px 3px
+        }
+
+        .table td {
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, .055);
+            border-top: 1px solid rgba(255, 255, 255, .07);
+            border-bottom: 1px solid rgba(255, 255, 255, .07)
+        }
+
+        .table td:first-child {
+            border-left: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 12px 0 0 12px;
+            font-weight: 800
+        }
+
+        .table td:last-child {
+            border-right: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 0 12px 12px 0;
+            text-align: right;
+            font-weight: 900
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 24px;
+            align-items: stretch
+        }
+
+        .note {
+            border-left: 4px solid var(--cyan);
+            padding: 18px 20px;
+            background: rgba(53, 208, 255, .08);
+            border-radius: 0 16px 16px 0;
+            margin-top: 16px
+        }
+
+        .bigmsg {
+            font-size: 31px;
+            line-height: 1.42;
+            font-weight: 900;
+            letter-spacing: -.02em
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(78, 161, 255, .14);
+            border: 1px solid rgba(78, 161, 255, .32);
+            color: #cfe7ff;
+            font-size: 15px;
+            font-weight: 800;
+            margin-right: 7px;
+            margin-bottom: 8px
+        }
+
+        .barChart {
+            display: flex;
+            align-items: end;
+            gap: 34px;
+            height: 300px;
+            padding: 25px 12px 8px;
+            border-left: 1px solid var(--line);
+            border-bottom: 1px solid var(--line)
+        }
+
+        .barGroup {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            gap: 10px;
+            position: relative
+        }
+
+        .bar {
+            width: 48px;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+            background: linear-gradient(180deg, var(--blue), #2465d9);
+            box-shadow: 0 10px 24px rgba(78, 161, 255, .25)
+        }
+
+        .bar.alt {
+            background: linear-gradient(180deg, var(--green), #148f66);
+            box-shadow: 0 10px 24px rgba(64, 211, 148, .18)
+        }
+
+        .bar.red {
+            background: linear-gradient(180deg, var(--red), #c8374b);
+            box-shadow: 0 10px 24px rgba(255, 107, 122, .18)
+        }
+
+        .bar span {
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 15px;
+            font-weight: 900;
+            white-space: nowrap
+        }
+
+        .xlbl {
+            position: absolute;
+            bottom: -38px;
+            width: 100%;
+            text-align: center;
+            color: var(--muted);
+            font-size: 16px;
+            font-weight: 800
+        }
+
+        .legend {
+            display: flex;
+            gap: 18px;
+            margin-top: 42px;
+            color: var(--muted);
+            font-size: 15px
+        }
+
+        .legend i {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+            margin-right: 6px;
+            background: var(--blue)
+        }
+
+        .legend .b i {
+            background: var(--green)
+        }
+
+        .funnel {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr 60px 1fr;
+            align-items: center;
+            gap: 8px;
+            margin-top: 30px
+        }
+
+        .funnel .step {
+            padding: 26px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .1);
+            text-align: center
+        }
+
+        .funnel .step strong {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 8px
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 38px;
+            color: var(--cyan)
+        }
+
+        .footer {
+            position: absolute;
+            left: 66px;
+            right: 66px;
+            bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #7f8aaa;
+            font-size: 13px;
+            z-index: 4
+        }
+
+        .progress {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--cyan), var(--blue));
+            width: 0;
+            z-index: 10;
+            transition: width .3s ease
+        }
+
+        .navBtns {
+            position: fixed;
+            right: 26px;
+            bottom: 22px;
+            z-index: 20;
+            display: flex;
+            gap: 10px
+        }
+
+        .navBtns button {
+            background: rgba(255, 255, 255, .09);
+            border: 1px solid rgba(255, 255, 255, .14);
+            color: white;
+            border-radius: 14px;
+            padding: 10px 13px;
+            font-size: 18px;
+            cursor: pointer
+        }
+
+        .counter {
+            position: fixed;
+            left: 26px;
+            bottom: 20px;
+            color: #8fa0c4;
+            z-index: 20;
+            font-size: 14px;
+            font-weight: 800
+        }
+
+        .compareLine {
+            display: grid;
+            grid-template-columns: 160px 1fr 80px;
+            gap: 12px;
+            align-items: center;
+            margin: 15px 0
+        }
+
+        .track {
+            height: 16px;
+            background: rgba(255, 255, 255, .08);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--blue), var(--cyan))
+        }
+
+        .fill.green {
+            background: linear-gradient(90deg, var(--green), #a7f3d0)
+        }
+
+        .printHint {
+            font-size: 15px;
+            color: var(--muted);
+            margin-top: auto
+        }
+
+        @media print {
+
+            html,
+            body {
+                overflow: visible;
+                background: white
+            }
+
+            .deck {
+                height: auto;
+                overflow: visible
+            }
+
+            .slides {
+                display: block;
+                transform: none !important;
+                height: auto
+            }
+
+            .slide {
+                width: 100vw;
+                height: 100vh;
+                page-break-after: always;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact
+            }
+
+            .navBtns,
+            .counter,
+            .progress {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="deck">
+        <div class="slides" id="slides">
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Naver Search Ads Performance Report</div>
+                    <h1>네이버 광고 성과 분석 보고서</h1>
+                    <p class="sub">2025년 4월 → 5월 디에이치 · 바로건설<br>광고비 · 클릭 · CTR · 콜 전환 통합 분석</p>
+                    <div style="margin-top:auto" class="grid cols3">
+                        <div class="card">
+                            <h3>분석 대상</h3>
+                            <p>디에이치 / 바로건설</p>
+                        </div>
+                        <div class="card">
+                            <h3>분석 기간</h3>
+                            <p>2025년 4월 대비 5월</p>
+                        </div>
+                        <div class="card">
+                            <h3>핵심 관점</h3>
+                            <p>노출 → 클릭 → 콜 문의</p>
+                        </div>
+                    </div>
+                    <p class="printHint">키보드 방향키 또는 우측 버튼으로 이동</p>
+                </div>
+                <div class="footer"><span>Monthly Advertising Report</span><span>01</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Executive Summary</div>
+                    <h2>핵심 요약</h2>
+                    <div class="grid cols2">
+                        <div class="card">
+                            <h3 class="bad">디에이치: 클릭수 감소로 콜 문의 하락</h3>
+                            <ul>
+                                <li>노출수는 <b class="good">+5.8%</b> 증가했지만 CTR은 <b class="bad">1.51% → 1.30%</b> 하락</li>
+                                <li>실내건축·기계설비·전문건설 등 핵심 면허 키워드 유입 급감</li>
+                                <li>광고비 축소보다 <b>클릭률 및 유입 효율 저하</b> 영향이 큼</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="good">바로건설: 실내건축 키워드 성장으로 클릭 유지</h3>
+                            <ul>
+                                <li>클릭수 <b>1,521 → 1,522</b>로 사실상 유지</li>
+                                <li>실내건축공사업면허, 실내건축면허 키워드 성장</li>
+                                <li>감소 키워드를 성장 키워드가 상쇄하여 콜 문의 안정적 유지</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <p class="bigmsg">5월의 핵심 이슈는 “광고가 덜 노출된 것”이 아니라 “노출 후 클릭으로 이어지는 비율이 낮아진 것”입니다.</p>
+                    </div>
+                </div>
+                <div class="footer"><span>Summary</span><span>02</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">DH Overall Performance</div>
+                    <h2>디에이치 — 전체 지표 현황</h2>
+                    <div class="grid cols5" style="grid-template-columns:repeat(5,1fr)">
+                        <div class="card kpi">
+                            <div class="label">노출수</div>
+                            <div class="num">114,147</div>
+                            <div class="delta good">+5.8%</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="label">클릭수</div>
+                            <div class="num">1,481</div>
+                            <div class="delta bad">-9.1%</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="label">CTR</div>
+                            <div class="num">1.30%</div>
+                            <div class="delta bad">1.51% → 1.30%</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="label">광고비</div>
+                            <div class="num">4,854,149</div>
+                            <div class="delta">-5.4%</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="label">평균 CPC</div>
+                            <div class="num">3,278원</div>
+                            <div class="delta bad">+4.0%</div>
+                        </div>
+                    </div>
+                    <div class="split" style="margin-top:24px">
+                        <div class="card">
+                            <h3>해석</h3>
+                            <p>노출수는 증가했지만 CTR 하락으로 클릭수가 감소했습니다. 광고비 절감 효과보다 유입 감소폭이 더 크게 나타나 전체 효율이 저하된 상황입니다.</p>
+                        </div>
+                        <div class="card">
+                            <h3>핵심 진단</h3>
+                            <p class="bigmsg"><span class="bad">노출 증가</span> + <span class="bad">CTR 하락</span><br>→ “광고
+                                위치”보다 “사용자 선택” 변화 가능성</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer"><span>DH Performance</span><span>03</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">DH Keyword Movement</div>
+                    <h2>디에이치 — 키워드별 성과 변화</h2>
+                    <div class="grid cols2">
+                        <div class="card">
+                            <h3 class="bad">클릭 감소 주요 키워드</h3>
+                            <table class="table">
+                                <tr>
+                                    <th>키워드</th>
+                                    <th>4월 → 5월</th>
+                                    <th>증감</th>
+                                </tr>
+                                <tr>
+                                    <td>실내건축공사업면허</td>
+                                    <td>87 → 38</td>
+                                    <td class="bad">-49</td>
+                                </tr>
+                                <tr>
+                                    <td>기계설비면허</td>
+                                    <td>71 → 37</td>
+                                    <td class="bad">-34</td>
+                                </tr>
+                                <tr>
+                                    <td>전문건설업면허</td>
+                                    <td>120 → 92</td>
+                                    <td class="bad">-28</td>
+                                </tr>
+                                <tr>
+                                    <td>건설산업기본법</td>
+                                    <td>39 → 13</td>
+                                    <td class="bad">-26</td>
+                                </tr>
+                                <tr>
+                                    <td>부동산개발업</td>
+                                    <td>48 → 31</td>
+                                    <td class="bad">-17</td>
+                                </tr>
+                                <tr>
+                                    <td>건축공사업</td>
+                                    <td>71 → 54</td>
+                                    <td class="bad">-17</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="card">
+                            <h3 class="good">성과 증가 키워드</h3>
+                            <table class="table">
+                                <tr>
+                                    <th>키워드</th>
+                                    <th>4월 → 5월</th>
+                                    <th>증감</th>
+                                </tr>
+                                <tr>
+                                    <td>조경식재공사업</td>
+                                    <td>13 → 39</td>
+                                    <td class="good">+26</td>
+                                </tr>
+                                <tr>
+                                    <td>건설면허양도양수</td>
+                                    <td>41 → 66</td>
+                                    <td class="good">+25</td>
+                                </tr>
+                                <tr>
+                                    <td>조경</td>
+                                    <td>0 → 23</td>
+                                    <td class="good">+23</td>
+                                </tr>
+                                <tr>
+                                    <td>철거면허</td>
+                                    <td>19 → 38</td>
+                                    <td class="good">+19</td>
+                                </tr>
+                                <tr>
+                                    <td>비계</td>
+                                    <td>43 → 56</td>
+                                    <td class="good">+13</td>
+                                </tr>
+                                <tr>
+                                    <td>전기공사업면허</td>
+                                    <td>33 → 44</td>
+                                    <td class="good">+11</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer"><span>DH Keyword Analysis</span><span>04</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Why CTR Dropped</div>
+                    <h2>디에이치 CTR 하락 원인 분석</h2>
+                    <div class="grid cols2">
+                        <div class="card">
+                            <h3>광고 순위 문제 가능성은 낮음</h3>
+                            <ul>
+                                <li>디에이치는 주요 키워드에서 상위 순위를 유지</li>
+                                <li>5월 노출수는 오히려 <b class="good">증가</b></li>
+                                <li>순위가 떨어졌다면 일반적으로 노출 감소가 동반될 가능성이 큼</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3>더 가능성 높은 원인</h3>
+                            <span class="pill">검색 수요 변화</span>
+                            <span class="pill">경쟁사 광고문구 강화</span>
+                            <span class="pill">모바일 클릭 분산</span>
+                            <span class="pill">정보탐색형 검색 증가</span>
+                            <p style="margin-top:14px">현재 상황은 “광고가 안 보인 것”이 아니라 “보였지만 클릭 선택을 덜 받은 것”으로 해석됩니다.</p>
+                        </div>
+                    </div>
+                    <div class="funnel">
+                        <div class="step"><strong class="good">노출 증가</strong><span>광고 노출량은 확보</span></div>
+                        <div class="arrow">→</div>
+                        <div class="step"><strong class="bad">CTR 하락</strong><span>클릭 선택률 감소</span></div>
+                        <div class="arrow">→</div>
+                        <div class="step"><strong class="bad">콜 감소</strong><span>유입 감소 영향</span></div>
+                    </div>
+                </div>
+                <div class="footer"><span>CTR Diagnosis</span><span>05</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Interior Construction Keyword Focus</div>
+                    <h2>실내건축공사업면허 — 심층 비교</h2>
+                    <div class="grid cols2">
+                        <div class="card">
+                            <h3 class="bad">디에이치</h3>
+                            <div class="bigmsg">87 → 38<br><span class="bad">-49 클릭</span></div>
+                            <p>상위 노출을 유지했음에도 클릭이 감소했습니다. 입찰 순위만으로는 설명이 어려우며 광고 소재, 검색 의도, 경쟁사 선택 증가를 함께 봐야 합니다.</p>
+                        </div>
+                        <div class="card">
+                            <h3 class="good">바로건설</h3>
+                            <div class="bigmsg">63 → 121<br><span class="good">+58 클릭</span></div>
+                            <p>동일 계열 키워드에서 유입이 증가했습니다. 시장 전체 감소보다는 업체별 클릭 선택 차이가 발생했을 가능성이 큽니다.</p>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <p><b>핵심:</b> 같은 실내건축 계열에서 디에이치는 감소, 바로건설은 증가했습니다. 따라서 단순한 시장 침체보다는 광고 문구·랜딩페이지·브랜드 선택 요소를 추가
+                            점검해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="footer"><span>Keyword Deep Dive</span><span>06</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Baro Overall Performance</div>
+                    <h2>바로건설 — 전체 지표 현황</h2>
+                    <div class="grid" style="grid-template-columns:repeat(5,1fr)">
+                        <div class="card kpi">
+                            <div class="label">노출수</div>
+                            <div class="num">106,697</div>
+                            <div class="delta good">+5.8%</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="label">클릭수</div>
+                            <div class="num">1,522</div>
+                            <div class="delta good">유지</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="label">CTR</div>
+                            <div class="num">1.43%</div>
+                            <div class="delta warn">소폭↓</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="label">광고비</div>
+                            <div class="num">4,331,653</div>
+                            <div class="delta">+3.5%</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="label">평균 CPC</div>
+                            <div class="num">2,846원</div>
+                            <div class="delta">+3.5%</div>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <p>CTR은 소폭 하락했지만 광고비 증액과 신규 키워드 유입으로 클릭수를 전월과 동일하게 유지하는 데 성공했습니다.</p>
+                    </div>
+                </div>
+                <div class="footer"><span>Baro Performance</span><span>07</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Baro Keyword Movement</div>
+                    <h2>바로건설 — 키워드별 성과 변화</h2>
+                    <div class="grid cols2">
+                        <div class="card">
+                            <h3 class="bad">클릭 감소 키워드</h3>
+                            <table class="table">
+                                <tr>
+                                    <th>키워드</th>
+                                    <th>4월 → 5월</th>
+                                    <th>증감</th>
+                                </tr>
+                                <tr>
+                                    <td>정보통신공사업</td>
+                                    <td>123 → 73</td>
+                                    <td class="bad">-50</td>
+                                </tr>
+                                <tr>
+                                    <td>기계설비공사업</td>
+                                    <td>111 → 88</td>
+                                    <td class="bad">-23</td>
+                                </tr>
+                                <tr>
+                                    <td>건설업면허</td>
+                                    <td>27 → 5</td>
+                                    <td class="bad">-22</td>
+                                </tr>
+                                <tr>
+                                    <td>기업진단</td>
+                                    <td>53 → 35</td>
+                                    <td class="bad">-18</td>
+                                </tr>
+                                <tr>
+                                    <td>실내건축공사업</td>
+                                    <td>60 → 43</td>
+                                    <td class="bad">-17</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="card">
+                            <h3 class="good">성과 증가 키워드</h3>
+                            <table class="table">
+                                <tr>
+                                    <th>키워드</th>
+                                    <th>4월 → 5월</th>
+                                    <th>증감</th>
+                                </tr>
+                                <tr>
+                                    <td>실내건축공사업면허</td>
+                                    <td>63 → 121</td>
+                                    <td class="good">+58</td>
+                                </tr>
+                                <tr>
+                                    <td>실내건축면허</td>
+                                    <td>334 → 375</td>
+                                    <td class="good">+41</td>
+                                </tr>
+                                <tr>
+                                    <td>조경식재공사업</td>
+                                    <td>16 → 49</td>
+                                    <td class="good">+33</td>
+                                </tr>
+                                <tr>
+                                    <td>조경</td>
+                                    <td>0 → 13</td>
+                                    <td class="good">+13</td>
+                                </tr>
+                                <tr>
+                                    <td>안전진단</td>
+                                    <td>0 → 10</td>
+                                    <td class="good">+10</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer"><span>Baro Keyword Analysis</span><span>08</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Comparison Chart</div>
+                    <h2>디에이치 vs 바로건설 — 클릭수 & CTR 비교</h2>
+                    <div class="grid cols2">
+                        <div class="card">
+                            <h3>클릭수 비교</h3>
+                            <div class="barChart">
+                                <div class="barGroup">
+                                    <div class="bar" style="height:260px"><span>1,629</span></div>
+                                    <div class="bar red" style="height:236px"><span>1,481</span></div>
+                                    <div class="xlbl">디에이치</div>
+                                </div>
+                                <div class="barGroup">
+                                    <div class="bar alt" style="height:243px"><span>1,521</span></div>
+                                    <div class="bar alt" style="height:243px"><span>1,522</span></div>
+                                    <div class="xlbl">바로건설</div>
+                                </div>
+                            </div>
+                            <div class="legend"><span><i></i>4월</span><span class="b"><i></i>바로건설/유지</span><span><i
+                                        style="background:var(--red)"></i>5월 감소</span></div>
+                        </div>
+                        <div class="card">
+                            <h3>CTR 추이</h3>
+                            <div class="compareLine"><b>DH 4월</b>
+                                <div class="track">
+                                    <div class="fill" style="width:100%"></div>
+                                </div><span>1.51%</span>
+                            </div>
+                            <div class="compareLine"><b>DH 5월</b>
+                                <div class="track">
+                                    <div class="fill" style="width:86%"></div>
+                                </div><span class="bad">1.30%</span>
+                            </div>
+                            <div class="compareLine"><b>바로 4월</b>
+                                <div class="track">
+                                    <div class="fill green" style="width:100%"></div>
+                                </div><span>1.51%</span>
+                            </div>
+                            <div class="compareLine"><b>바로 5월</b>
+                                <div class="track">
+                                    <div class="fill green" style="width:95%"></div>
+                                </div><span>1.43%</span>
+                            </div>
+                            <div class="note">
+                                <p>두 업체 모두 CTR은 하락했지만, 디에이치는 클릭 감소폭이 더 커 콜 문의 하락으로 이어졌습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer"><span>Comparison</span><span>09</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Interpretation</div>
+                    <h2>콜 감소의 구조적 해석</h2>
+                    <div class="funnel">
+                        <div class="step"><strong>광고비</strong><span>유사 수준 유지</span></div>
+                        <div class="arrow">→</div>
+                        <div class="step"><strong class="good">노출</strong><span>오히려 증가</span></div>
+                        <div class="arrow">→</div>
+                        <div class="step"><strong class="bad">클릭</strong><span>DH 감소</span></div>
+                    </div>
+                    <div class="funnel" style="grid-template-columns:1fr 60px 1fr 60px 1fr;margin-top:20px">
+                        <div class="step"><strong class="bad">CTR</strong><span>1.51% → 1.30%</span></div>
+                        <div class="arrow">→</div>
+                        <div class="step"><strong class="bad">유입</strong><span>클릭수 -9.1%</span></div>
+                        <div class="arrow">→</div>
+                        <div class="step"><strong class="bad">콜</strong><span>문의 감소 가능성</span></div>
+                    </div>
+                    <div class="note">
+                        <p>따라서 5월 디에이치 콜 감소는 광고비 부족보다는 핵심 키워드의 클릭 감소와 CTR 하락에 따른 유입 감소 영향으로 보는 것이 타당합니다.</p>
+                    </div>
+                </div>
+                <div class="footer"><span>Funnel Analysis</span><span>10</span></div>
+            </section>
+
+            <section class="slide">
+                <div class="content">
+                    <div class="eyebrow">Action Plan</div>
+                    <h2>결론 및 향후 제안</h2>
+                    <div class="grid cols2">
+                        <div class="card">
+                            <h3 class="bad">디에이치 개선 방향</h3>
+                            <ul>
+                                <li>실내건축공사업면허·기계설비면허·전문건설업면허 CTR 집중 점검</li>
+                                <li>광고 문구 A/B 테스트: 비용, 등록요건, 처리기간, 상담 유도 문구 비교</li>
+                                <li>경쟁사 광고 소재 및 랜딩페이지 비교</li>
+                                <li>상위 순위 유지뿐 아니라 실제 클릭 선택률 기준으로 운영</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="good">바로건설 유지 방향</h3>
+                            <ul>
+                                <li>실내건축공사업면허·실내건축면허 성과 유지</li>
+                                <li>조경·안전진단 신규 영역 확장 검토</li>
+                                <li>클릭수 유지 키워드의 광고비 효율 모니터링</li>
+                                <li>성과 키워드 중심으로 예산 우선 배분</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <p><b>추가 분석 권장:</b> 4월·5월 콜 수 데이터를 결합하면 광고 유입 대비 콜 전환율을 계산할 수 있어, 원인이 광고 효율인지 상담 전환 문제인지 더 정밀하게
+                            구분할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="footer"><span>Recommendations</span><span>11</span></div>
+            </section>
+
+        </div>
+    </div>
+    <div class="counter" id="counter">1 / 11</div>
+    <div class="navBtns"><button onclick="prevSlide()">←</button><button onclick="nextSlide()">→</button></div>
+    <div class="progress" id="progress"></div>
+
+    <script>
+        const slides = document.getElementById('slides');
+        const total = document.querySelectorAll('.slide').length;
+        let current = 0;
+        function showSlide(n) {
+            current = Math.max(0, Math.min(total - 1, n));
+            slides.style.transform = `translateX(-${current * 100}vw)`;
+            document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+            document.getElementById('progress').style.width = `${((current + 1) / total) * 100}%`;
+        }
+        function nextSlide() { showSlide(current + 1); }
+        function prevSlide() { showSlide(current - 1); }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide();
+            if (e.key === 'Home') showSlide(0);
+            if (e.key === 'End') showSlide(total - 1);
+        });
+        let startX = null;
+        document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+        document.addEventListener('touchend', e => {
+            if (startX === null) return;
+            const dx = e.changedTouches[0].clientX - startX;
+            if (dx < -45) nextSlide();
+            if (dx > 45) prevSlide();
+            startX = null;
+        });
+        showSlide(0);
+    </script>
+</body>
+
+</html>
