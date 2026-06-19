@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>네이버 광고비 소진 분석 보고서</title>
+    <title>네이버 광고비 소진 분석 보고서 - 인터랙티브</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -925,64 +925,68 @@
                 <div class="grid-2">
                     <div class="panel">
                         <h3>총 광고비 비교</h3>
+                        <div class="sub">평일 4일 기준 광고비 비교</div><canvas id="spendChart" height="225"></canvas>
+                    </div>
+                    <div class="panel">
+                        <h3>클릭수 · CTR 비교</h3>
+                        <div class="sub">클릭수 및 CTR 변화</div><canvas id="clickCtrChart" height="225"></canvas>
+                    </div>
+                </div>
 
-                        <div class="panel">
-                            <h3>클릭수 · CTR 비교</h3>
-
-                        </div>
-
-                        <div class="panel" style="margin-top:22px;">
-                            <h3>기간별 주요 지표 비교</h3>
-                            <div class="sub">각 행의 막대는 증감 규모를 시각화한 보조 지표입니다.</div>
-                            <table class="interactive-table">
-                                <thead>
-                                    <tr>
-                                        <th>구분</th>
-                                        <th>6/8~6/11</th>
-                                        <th>6/15~6/18</th>
-                                        <th>증감</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>총 노출수<div class="table-bar" style="--w:19%"><span></span></div>
-                                        </td>
-                                        <td>46,014회</td>
-                                        <td>47,544회</td>
-                                        <td class="up">+3.3%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>총 클릭수<div class="table-bar" style="--w:71%"><span></span></div>
-                                        </td>
-                                        <td>644회</td>
-                                        <td>724회</td>
-                                        <td class="up">+12.4%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>총 광고비<div class="table-bar red" style="--w:100%"><span></span></div>
-                                        </td>
-                                        <td>1,931,981원</td>
-                                        <td>2,268,572원</td>
-                                        <td class="up">+336,591원 / +17.4%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>평균 CTR<div class="table-bar" style="--w:49%"><span></span></div>
-                                        </td>
-                                        <td>1.40%</td>
-                                        <td>1.52%</td>
-                                        <td class="up">+0.12%p / +8.6%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>평균 CPC<div class="table-bar red" style="--w:25%"><span></span></div>
-                                        </td>
-                                        <td>3,000원</td>
-                                        <td>3,133원</td>
-                                        <td class="up">+133원 / +4.4%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
+                <div class="panel" style="margin-top:22px;">
+                    <h3>기간별 주요 지표 비교</h3>
+                    <div class="sub">각 행의 막대는 증감 규모를 시각화한 보조 지표입니다.</div>
+                    <table class="interactive-table">
+                        <thead>
+                            <tr>
+                                <th>구분</th>
+                                <th>6/8~6/11</th>
+                                <th>6/15~6/18</th>
+                                <th>증감</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>총 노출수<div class="table-bar" style="--w:19%"><span></span></div>
+                                </td>
+                                <td>46,014회</td>
+                                <td>47,544회</td>
+                                <td class="up">+3.3%</td>
+                            </tr>
+                            <tr>
+                                <td>총 클릭수<div class="table-bar" style="--w:71%"><span></span></div>
+                                </td>
+                                <td>644회</td>
+                                <td>724회</td>
+                                <td class="up">+12.4%</td>
+                            </tr>
+                            <tr>
+                                <td>총 광고비<div class="table-bar red" style="--w:100%"><span></span></div>
+                                </td>
+                                <td>1,931,981원</td>
+                                <td>2,268,572원</td>
+                                <td class="up">+336,591원 / +17.4%</td>
+                            </tr>
+                            <tr>
+                                <td>평균 CTR<div class="table-bar" style="--w:49%"><span></span></div>
+                                </td>
+                                <td>1.40%</td>
+                                <td>1.52%</td>
+                                <td class="up">+0.12%p / +8.6%</td>
+                            </tr>
+                            <tr>
+                                <td>평균 CPC<div class="table-bar red" style="--w:25%"><span></span></div>
+                                </td>
+                                <td>3,000원</td>
+                                <td>3,133원</td>
+                                <td class="up">+133원 / +4.4%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="note-box">발표 메모:
+                    표를 보는 순간 광고비 행의 막대가 가장 길게 올라오도록 구성했습니다. 수치뿐 아니라 시각적으로도 소진 비용 증가가 가장 큰 변화라는 점을 보여줍니다.</div>
+            </div>
         </section>
 
         <section class="slide">
@@ -1011,7 +1015,7 @@
                 <div class="grid-2" style="margin-top:22px;">
                     <div class="panel">
                         <h3>검색 환경별 인식 차이</h3>
-
+                        <div class="sub">검색 환경별 노출 판단 구조</div>
                         <div class="doughnut-wrap"><canvas id="environmentChart" height="260"></canvas></div>
                     </div>
                     <div class="panel">
@@ -1039,8 +1043,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="notice warn">내부 화면 기준으로 광고 순위를 세팅할 경우 실제 경쟁 환경을 낮게 인식할 수 있습니다.<br> 이번 광고비 소진 속도 증가는 이 검색 환경
-                    차이에서
+                <div class="notice warn">내부 화면 기준으로 광고 순위를 세팅할 경우 실제 경쟁 환경을 낮게 인식할 수 있습니다. 이번 광고비 소진 속도 증가는 이 검색 환경 차이에서
                     출발한 것으로 판단됩니다.</div>
             </div>
         </section>
@@ -1070,16 +1073,16 @@
                 <div class="grid-3">
                     <div class="panel">
                         <h3>입찰가 범위</h3>
-                        <canvas id="bidChart" height="260"></canvas>
+                        <div class="sub">입찰가 기준 비교</div><canvas id="bidChart" height="260"></canvas>
                     </div>
                     <div class="panel">
                         <h3>예산 소진 주기</h3>
-                        <div class="sub">100만원 기준</div>
+                        <div class="sub">100만원 충전 기준 소진 주기</div>
                         <div class="doughnut-wrap"><canvas id="budgetDaysChart" height="260"></canvas></div>
                     </div>
                     <div class="panel">
                         <h3>CPC 체감 영향</h3>
-                        <canvas id="cpcImpactChart" height="260"></canvas>
+                        <div class="sub">주요 키워드 입찰가 변화</div><canvas id="cpcImpactChart" height="260"></canvas>
                     </div>
                 </div>
                 <div class="notice">문제는 단순 광고비 증가가 아니라, 순위 판단 기준이 내부 환경에 고정되면서 실제 시장 기준 입찰가가 과소 산정된 점입니다.</div>
@@ -1115,7 +1118,7 @@
                 <div class="grid-2" style="margin-top:28px;">
                     <div class="panel">
                         <h3>광고비 증가 요인 분해</h3>
-                        <div class="sub">Doughnut Chart · 내부 분석용 가중치</div>
+                        <div class="sub">광고비 증가 요인 구성</div>
                         <div class="doughnut-wrap"><canvas id="factorChart" height="250"></canvas></div>
                     </div>
                     <div class="panel">
@@ -1140,7 +1143,7 @@
                 <div class="grid-2">
                     <div class="panel">
                         <h3>개선안 우선순위</h3>
-                        <div class="sub">Progress Bar · 실행 우선순위</div>
+                        <div class="sub">실행 우선순위</div>
                         <div class="progress-list">
                             <div class="progress-item">
                                 <div class="progress-top"><span>VPN 및 외부망 순위 검증</span><span>★★★★★</span></div>
@@ -1176,14 +1179,16 @@
                     </div>
                     <div class="panel">
                         <h3>개선안 구성 비중</h3>
-                        <div class="sub">Doughnut Chart · 운영 기준 재정비 항목</div>
+                        <div class="sub">운영 기준 재정비 항목</div>
                         <div class="doughnut-wrap action-chart-wrap"><canvas id="actionChart" height="420"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="notice">향후 광고 운영은 “내 화면에서 보이는 순위”가 아니라 “외부 환경에서 확인되는 실제 노출 순위”와 “네이버 광고 보고서상 평균 노출 지표”를 함께
                     기준으로 삼는 방식으로 변경하는 것이 적절합니다.</div>
-
+                <div class="note-box">발표 메모:
+                    마지막은 개선안 중심으로 마무리합니다. 핵심은 내부 기준만으로 광고 순위를 판단하지 않고, 외부망과 보고서 데이터를 함께 보겠다는 운영 체계 개선입니다.</div>
+            </div>
         </section>
 
         <div class="footer">네이버 광고비 소진 분석 보고서 · 내부 검토용 · 데이터 기준: 2026.06.08~06.11 / 2026.06.15~06.18</div>
@@ -1201,36 +1206,23 @@
                 if (chart.config.type !== 'doughnut') return;
                 const { ctx, chartArea } = chart;
                 if (!chartArea) return;
+                const dataset = chart.data.datasets[0];
+                const total = dataset.data.reduce((a, b) => a + Number(b), 0);
                 const centerX = (chartArea.left + chartArea.right) / 2;
                 const centerY = (chartArea.top + chartArea.bottom) / 2;
 
                 ctx.save();
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-
-                // Check if there is an active hovered item
-                let label = chart.options.plugins.centerLabel?.text || '';
-                let sub = chart.options.plugins.centerLabel?.subText || '';
-
-                if (chart.active && chart.active.length > 0) {
-                    const activeElement = chart.active[0];
-                    const dataIndex = activeElement.index;
-                    const dataValue = chart.data.datasets[activeElement.datasetIndex].data[dataIndex];
-                    const dataLabel = chart.data.labels[dataIndex];
-
-                    label = typeof dataValue === 'number' && dataValue > 1000 ? dataValue.toLocaleString('ko-KR') + (sub.includes('주기') ? '일' : '원') : dataValue + '%';
-                    if (sub.includes('소진 주기')) {
-                        label = dataValue + '일';
-                    }
-                    sub = dataLabel;
-                }
-
                 ctx.fillStyle = '#1e3a8a';
-                ctx.font = '800 24px Pretendard, Noto Sans KR, sans-serif';
-                ctx.fillText(label, centerX, centerY - 10);
+                ctx.font = '800 22px Pretendard, Noto Sans KR, sans-serif';
+
+                const label = chart.options.plugins.centerLabel?.text || '';
+                ctx.fillText(label, centerX, centerY - 8);
 
                 ctx.fillStyle = '#64748b';
-                ctx.font = '700 13px Pretendard, Noto Sans KR, sans-serif';
+                ctx.font = '700 12px Pretendard, Noto Sans KR, sans-serif';
+                const sub = chart.options.plugins.centerLabel?.subText || '구성 비중';
                 ctx.fillText(sub, centerX, centerY + 16);
                 ctx.restore();
             }
@@ -1246,16 +1238,40 @@
 
         const growFromZeroAnimation = {
             y: {
-                duration: 2000,
+                type: 'number',
                 easing: 'easeOutQuart',
-                from: 0
+                duration: 1600,
+                from: 0,
+                delay(ctx) {
+                    if (ctx.type !== 'data') return 0;
+                    return ctx.dataIndex * 180;
+                }
             }
         };
 
         const lineDrawAnimation = {
+            x: {
+                type: 'number',
+                easing: 'easeOutQuart',
+                duration: 900,
+                from: NaN,
+                delay(ctx) {
+                    if (ctx.type !== 'data') return 0;
+                    return ctx.dataIndex * 220;
+                }
+            },
             y: {
-                duration: 2000,
-                easing: 'easeOutQuart'
+                type: 'number',
+                easing: 'easeOutQuart',
+                duration: 1100,
+                from: ctx => {
+                    const scale = ctx.chart.scales[ctx.dataset.yAxisID || 'y'];
+                    return scale ? scale.getPixelForValue(0) : 0;
+                },
+                delay(ctx) {
+                    if (ctx.type !== 'data') return 0;
+                    return ctx.dataIndex * 220;
+                }
             }
         };
 
@@ -1308,41 +1324,42 @@
         }
 
 
-        function makeCharts() {
-            charts.forEach(c => c.destroy());
-            charts = [];
 
-            charts.push(new Chart(document.getElementById('spendChart'), {
+
+        const chartInstances = {};
+
+        function buildSpendChart() {
+            return new Chart(document.getElementById('spendChart'), {
                 type: 'bar',
                 data: {
-                    labels: chartData.labels, datasets: [{
+                    labels: chartData.labels,
+                    datasets: [{
                         label: '총 광고비',
                         data: chartData.spendCompare,
                         borderRadius: { topLeft: 8, topRight: 8, bottomLeft: 0, bottomRight: 0 },
                         borderSkipped: 'bottom',
                         categoryPercentage: 0.62,
                         barPercentage: 0.72,
-                        backgroundColor: [palette[0], palette[1]],
-                        hoverBackgroundColor: ['rgba(37,99,235,.95)', 'rgba(239,68,68,.95)']
+                        backgroundColor: [palette[0], palette[1]]
                     }]
                 },
                 options: {
-                    animations: growFromZeroAnimation,
                     responsive: true,
-                    interaction: { intersect: false, mode: 'index' },
-                    plugins: {
-                        tooltip: { callbacks: { label: c => '광고비: ' + won(c.parsed.y) } }
-                    },
+                    animation: { duration: 1500, easing: 'easeOutQuart' },
                     scales: {
                         y: { beginAtZero: true, ticks: { callback: v => (v / 10000).toLocaleString('ko-KR') + '만' }, grid: { color: '#e8eef7' } },
                         x: { grid: { display: false } }
-                    }
+                    },
+                    plugins: { tooltip: { callbacks: { label: c => '광고비: ' + won(c.parsed.y) } } }
                 }
-            }));
+            });
+        }
 
-            charts.push(new Chart(document.getElementById('clickCtrChart'), {
+        function buildClickCtrChart() {
+            return new Chart(document.getElementById('clickCtrChart'), {
                 data: {
-                    labels: chartData.labels, datasets: [
+                    labels: chartData.labels,
+                    datasets: [
                         {
                             type: 'bar',
                             label: '클릭수',
@@ -1352,8 +1369,7 @@
                             borderSkipped: 'bottom',
                             categoryPercentage: 0.62,
                             barPercentage: 0.72,
-                            backgroundColor: 'rgba(37,99,235,.62)',
-                            hoverBackgroundColor: 'rgba(37,99,235,.92)'
+                            backgroundColor: 'rgba(37,99,235,.62)'
                         },
                         {
                             type: 'line',
@@ -1361,7 +1377,6 @@
                             data: chartData.ctrCompare,
                             yAxisID: 'y1',
                             borderColor: '#ef4444',
-                            backgroundColor: 'rgba(239,68,68,.12)',
                             borderWidth: 4,
                             fill: false,
                             tension: .42,
@@ -1375,8 +1390,8 @@
                     ]
                 },
                 options: {
-                    animations: lineDrawAnimation,
                     responsive: true,
+                    animation: { duration: 1500, easing: 'easeOutQuart' },
                     interaction: { intersect: false, mode: 'index' },
                     scales: {
                         y: { beginAtZero: true, position: 'left', grid: { color: '#e8eef7' } },
@@ -1384,61 +1399,64 @@
                         x: { grid: { display: false } }
                     }
                 }
-            }));
+            });
+        }
 
-            charts.push(new Chart(document.getElementById('environmentChart'), {
+        function buildEnvironmentChart() {
+            return new Chart(document.getElementById('environmentChart'), {
                 type: 'doughnut',
                 data: {
                     labels: ['내부에서 확인 가능', '외부 확인 필요'],
-                    datasets: [{
-                        data: [55, 45],
-                        backgroundColor: [palette[0], palette[1]],
-                        borderColor: '#ffffff',
-                        borderWidth: 4,
-                        spacing: 4,
-                        hoverOffset: 18
-                    }]
+                    datasets: [{ data: [55, 45], backgroundColor: [palette[0], palette[1]], borderColor: '#fff', borderWidth: 4, spacing: 4, hoverOffset: 18 }]
                 },
                 options: doughnutOptions('55 : 45', '검색 환경 차이')
-            }));
+            });
+        }
 
-            charts.push(new Chart(document.getElementById('bidChart'), {
+        function buildBidChart() {
+            return new Chart(document.getElementById('bidChart'), {
                 type: 'bar',
                 data: {
-                    labels: ['기존 인식', '실제 하한', '실제 상한'], datasets: [{
+                    labels: ['기존 인식', '실제 하한', '실제 상한'],
+                    datasets: [{
                         label: '입찰가',
                         data: chartData.bidGap,
                         borderRadius: { topLeft: 8, topRight: 8, bottomLeft: 0, bottomRight: 0 },
                         borderSkipped: 'bottom',
                         categoryPercentage: 0.62,
                         barPercentage: 0.72,
-                        backgroundColor: [palette[0], palette[3], palette[1]],
-                        hoverBackgroundColor: ['rgba(37,99,235,.95)', 'rgba(249,115,22,.95)', 'rgba(239,68,68,.95)']
+                        backgroundColor: [palette[0], palette[3], palette[1]]
                     }]
                 },
-                options: { animation: { duration: 2000, easing: 'easeOutQuart' }, plugins: { tooltip: { callbacks: { label: c => won(c.parsed.y) } } }, scales: { y: { beginAtZero: true, ticks: { callback: v => won(v) }, grid: { color: '#e8eef7' } }, x: { grid: { display: false } } } }
-            }));
+                options: {
+                    responsive: true,
+                    animation: { duration: 1500, easing: 'easeOutQuart' },
+                    plugins: { tooltip: { callbacks: { label: c => won(c.parsed.y) } } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: v => won(v) }, grid: { color: '#e8eef7' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
 
-            charts.push(new Chart(document.getElementById('budgetDaysChart'), {
+        function buildBudgetDaysChart() {
+            return new Chart(document.getElementById('budgetDaysChart'), {
                 type: 'doughnut',
                 data: {
                     labels: ['기존 4~5일', '현재 3~4일'],
-                    datasets: [{
-                        data: chartData.budgetDays,
-                        backgroundColor: [palette[0], palette[1]],
-                        borderColor: '#ffffff',
-                        borderWidth: 4,
-                        spacing: 4,
-                        hoverOffset: 18
-                    }]
+                    datasets: [{ data: chartData.budgetDays, backgroundColor: [palette[0], palette[1]], borderColor: '#fff', borderWidth: 4, spacing: 4, hoverOffset: 18 }]
                 },
                 options: doughnutOptions('단축', '소진 주기')
-            }));
+            });
+        }
 
-            charts.push(new Chart(document.getElementById('cpcImpactChart'), {
+        function buildCpcImpactChart() {
+            return new Chart(document.getElementById('cpcImpactChart'), {
                 type: 'line',
                 data: {
-                    labels: ['기존 예상', '실제 하한', '실제 상한'], datasets: [{
+                    labels: ['기존 예상', '실제 하한', '실제 상한'],
+                    datasets: [{
                         label: '주요 키워드 CPC 체감 범위',
                         data: [8000, 10000, 13000],
                         fill: true,
@@ -1454,61 +1472,59 @@
                         pointBorderColor: '#fff'
                     }]
                 },
-                options: { animation: { duration: 2000, easing: 'easeOutQuart' }, plugins: { tooltip: { callbacks: { label: c => won(c.parsed.y) } } }, scales: { y: { beginAtZero: false, ticks: { callback: v => won(v) }, grid: { color: '#e8eef7' } }, x: { grid: { display: false } } } }
-            }));
+                options: {
+                    responsive: true,
+                    animation: { duration: 1500, easing: 'easeOutQuart' },
+                    plugins: { tooltip: { callbacks: { label: c => won(c.parsed.y) } } },
+                    scales: {
+                        y: { beginAtZero: false, ticks: { callback: v => won(v) }, grid: { color: '#e8eef7' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
 
-            charts.push(new Chart(document.getElementById('factorChart'), {
+        function buildFactorChart() {
+            return new Chart(document.getElementById('factorChart'), {
                 type: 'doughnut',
                 data: {
                     labels: chartData.increaseMix.map(x => x.name),
-                    datasets: [{
-                        data: chartData.increaseMix.map(x => x.value),
-                        backgroundColor: [palette[0], palette[1], palette[2]],
-                        borderColor: '#ffffff',
-                        borderWidth: 4,
-                        spacing: 4,
-                        hoverOffset: 18
-                    }]
+                    datasets: [{ data: chartData.increaseMix.map(x => x.value), backgroundColor: [palette[0], palette[1], palette[2]], borderColor: '#fff', borderWidth: 4, spacing: 4, hoverOffset: 18 }]
                 },
                 options: doughnutOptions('100%', '증가 요인')
-            }));
+            });
+        }
 
-            charts.push(new Chart(document.getElementById('actionChart'), {
+        function buildActionChart() {
+            return new Chart(document.getElementById('actionChart'), {
                 type: 'doughnut',
                 data: {
                     labels: chartData.actionProgress.map(x => x.label),
-                    datasets: [{
-                        data: chartData.actionProgress.map(x => x.score),
-                        backgroundColor: palette,
-                        borderColor: '#ffffff',
-                        borderWidth: 4,
-                        spacing: 4,
-                        hoverOffset: 18
-                    }]
+                    datasets: [{ data: chartData.actionProgress.map(x => x.score), backgroundColor: palette, borderColor: '#fff', borderWidth: 4, spacing: 4, hoverOffset: 18 }]
                 },
                 options: doughnutOptions('Action', '개선 계획')
-            }));
+            });
         }
 
-        function animateCounters(scope = document) {
-            scope.querySelectorAll('.counter').forEach(el => {
-                if (el.dataset.done === '1') return;
-                el.dataset.done = '1';
-                const target = parseFloat(el.dataset.value || '0');
-                const suffix = el.dataset.suffix || '';
-                const format = el.dataset.format || '';
-                const start = performance.now();
-                const duration = 1200;
-                function tick(now) {
-                    const p = Math.min((now - start) / duration, 1);
-                    const eased = 1 - Math.pow(1 - p, 4);
-                    const val = target * eased;
-                    if (format === 'won') el.textContent = Math.round(val).toLocaleString('ko-KR') + '원';
-                    else if (target % 1 !== 0) el.textContent = val.toFixed(1) + suffix;
-                    else el.textContent = Math.round(val).toLocaleString('ko-KR') + suffix;
-                    if (p < 1) requestAnimationFrame(tick);
+        const chartBuilders = {
+            spendChart: buildSpendChart,
+            clickCtrChart: buildClickCtrChart,
+            environmentChart: buildEnvironmentChart,
+            bidChart: buildBidChart,
+            budgetDaysChart: buildBudgetDaysChart,
+            cpcImpactChart: buildCpcImpactChart,
+            factorChart: buildFactorChart,
+            actionChart: buildActionChart
+        };
+
+        function ensureChartsInSlide(slide) {
+            slide.querySelectorAll('canvas[id]').forEach(canvas => {
+                const id = canvas.id;
+                if (!chartBuilders[id]) return;
+                if (chartInstances[id]) {
+                    chartInstances[id].destroy();
                 }
-                requestAnimationFrame(tick);
+                chartInstances[id] = chartBuilders[id]();
             });
         }
 
@@ -1517,40 +1533,27 @@
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     animateCounters(entry.target);
-
-                    // 스크롤되어 해당 슬라이드가 화면에 진입할 때 내부에 포함된 차트만 애니메이션 재생
-                    entry.target.querySelectorAll('canvas').forEach(canvas => {
-                        const targetChart = charts.find(c => c.canvas && c.canvas.id === canvas.id);
-                        if (targetChart) {
-                            targetChart.reset();
-                            targetChart.update();
-                        }
-                    });
+                    ensureChartsInSlide(entry.target);
                 }
             });
-        }, { threshold: .12 });
+        }, { threshold: .22 });
 
         document.querySelectorAll('.slide').forEach(s => observer.observe(s));
         animateCounters(document.querySelector('.hero'));
-        makeCharts();
-
 
         function replayCharts() {
-            document.querySelectorAll('.counter').forEach(el => { el.dataset.done = ''; });
-            animateCounters(document);
-            makeCharts();
-
-            // 현재 눈에 보이는 슬라이드의 차트는 즉시 애니메이션 다시 재생
-            document.querySelectorAll('.slide.visible').forEach(slide => {
-                slide.querySelectorAll('canvas').forEach(canvas => {
-                    const targetChart = charts.find(c => c.canvas && c.canvas.id === canvas.id);
-                    if (targetChart) {
-                        targetChart.reset();
-                        targetChart.update();
-                    }
+            const current = [...document.querySelectorAll('.slide')]
+                .find(slide => {
+                    const rect = slide.getBoundingClientRect();
+                    return rect.top < window.innerHeight * .65 && rect.bottom > window.innerHeight * .25;
                 });
-            });
+            if (current) {
+                current.querySelectorAll('.counter').forEach(el => { el.dataset.done = ''; });
+                animateCounters(current);
+                ensureChartsInSlide(current);
+            }
         }
+
         function toggleNotes() {
             document.querySelectorAll('.note-box').forEach(n => n.classList.toggle('on'));
         }
