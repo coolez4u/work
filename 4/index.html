@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네이버 광고 성과 분석 보고서</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #0D1B3E;
+            --blue: #1565C0;
+            --ice: #4FC3F7;
+            --coral: #FF5722;
+            --green: #43A047;
+            --light-bg: #F5F7FB;
+            --card-bg: #FFFFFF;
+            --text-dark: #1A1A2E;
+            --text-mid: #4A5568;
+            --text-light: #718096;
+            --border: #E2E8F0;
+            --warn: #FFA726;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* SLIDE WRAPPER */
+        .slide-deck {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 20px 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* SLIDE CARD */
+        .slide {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(13, 27, 62, 0.08);
+        }
+
+        /* SLIDE HEADER */
+        .slide-header {
+            background: var(--navy);
+            padding: 28px 40px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .slide-num {
+            width: 42px;
+            height: 42px;
+            background: var(--ice);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            color: var(--navy);
+            flex-shrink: 0;
+        }
+
+        .slide-title {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .slide-subtitle {
+            color: var(--ice);
+            font-size: 13px;
+            margin-top: 2px;
+            font-weight: 300;
+        }
+
+        /* SLIDE BODY */
+        .slide-body {
+            padding: 32px 40px;
+        }
+
+        /* HERO SLIDE */
+        .hero-slide {
+            background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #1565C0 100%);
+            border-radius: 20px;
+            padding: 60px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 24px rgba(13, 27, 62, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-slide::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(79, 195, 247, 0.08);
+        }
+
+        .hero-slide::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: 40%;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(79, 195, 247, 0.05);
+        }
+
+        .hero-left {
+            flex: 1;
+            z-index: 1;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(79, 195, 247, 0.2);
+            color: var(--ice);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .hero-title {
+            font-size: 36px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.25;
+            margin-bottom: 12px;
+        }
+
+        .hero-title span {
+            color: var(--ice);
+        }
+
+        .hero-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            margin-bottom: 28px;
+            max-width: 460px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 12px 20px;
+        }
+
+        .hero-meta-item .label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        .hero-meta-item .value {
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .hero-right {
+            flex-shrink: 0;
+            z-index: 1;
+            padding-left: 40px;
+        }
+
+        .alert-box {
+            background: rgba(255, 87, 34, 0.15);
+            border: 2px solid rgba(255, 87, 34, 0.5);
+            border-radius: 16px;
+            padding: 20px 24px;
+            width: 240px;
+        }
+
+        .alert-box .alert-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .alert-box .alert-title {
+            color: #FF8A65;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .alert-box .alert-text {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* KPI CARDS */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-card {
+            border-radius: 14px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card.blue {
+            background: linear-gradient(135deg, #1565C0, #1976D2);
+        }
+
+        .kpi-card.teal {
+            background: linear-gradient(135deg, #0097A7, #00ACC1);
+        }
+
+        .kpi-card.green {
+            background: linear-gradient(135deg, #2E7D32, #43A047);
+        }
+
+        .kpi-card.warn {
+            background: linear-gradient(135deg, #E65100, #F57C00);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .kpi-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            color: #fff;
+            font-size: 26px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .kpi-sub {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+
+        .kpi-badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .kpi-badge.up {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .kpi-badge.down {
+            background: rgba(255, 87, 34, 0.3);
+            color: #FFB300;
+        }
+
+        /* TWO COL */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* CHART CONTAINER */
+        .chart-box {
+            background: var(--light-bg);
+            border-radius: 14px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .chart-box h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .chart-box p {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        /* INSIGHT BOX */
+        .insight-box {
+            border-left: 4px solid var(--blue);
+            background: #EFF6FF;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px;
+            margin-top: 20px;
+        }
+
+        .insight-box.warn {
+            border-color: var(--coral);
+            background: #FFF3E0;
+        }
+
+        .insight-box.success {
+            border-color: var(--green);
+            background: #E8F5E9;
+        }
+
+        .insight-box .insight-title {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .insight-box p {
+            font-size: 13px;
+            color: var(--text-mid);
+            line-height: 1.6;
+        }
+
+        /* CAUSE TABLE */
+        .cause-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .cause-item {
+            background: var(--light-bg);
+            border-radius: 14px;
+            padding: 18px 22px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .cause-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .cause-icon.red {
+            background: #FFEBEE;
+        }
+
+        .cause-icon.blue {
+            background: #E3F2FD;
+        }
+
+        .cause-icon.orange {
+            background: #FFF3E0;
+        }
+
+        .cause-icon.green {
+            background: #E8F5E9;
+        }
+
+        .cause-content h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .cause-content p {
+            font-size: 13px;
+            color: var(--text-mid);
+            line-height: 1.55;
+        }
+
+        /* CPC COMPARE */
+        .cpc-compare {
+            background: var(--light-bg);
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .cpc-compare h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .cpc-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .cpc-label {
+            width: 130px;
+            font-size: 12px;
+            color: var(--text-mid);
+            flex-shrink: 0;
+        }
+
+        .cpc-bar-wrap {
+            flex: 1;
+            height: 20px;
+            background: #E2E8F0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cpc-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .cpc-val {
+            width: 80px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        /* ACTION TABLE */
+        .action-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .action-table th {
+            background: var(--navy);
+            color: #fff;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .action-table th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .action-table th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .action-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .action-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .action-table tr:nth-child(even) td {
+            background: #F8FAFF;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .priority-badge.high {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .priority-badge.mid {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .priority-badge.low {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        /* FOOTER */
+        .report-footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-light);
+            padding: 16px;
+        }
+
+        /* DIVIDER */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 20px 0;
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--blue);
+            margin-bottom: 14px;
+        }
+
+        /* SCROLL INDICATOR */
+        .scroll-hint {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-light);
+            padding: 8px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(4px);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .three-col {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-slide {
+                flex-direction: column;
+            }
+
+            .hero-right {
+                padding-left: 0;
+                padding-top: 20px;
+            }
+
+            .alert-box {
+                width: 100%;
+            }
+
+            .slide-body {
+                padding: 20px;
+            }
+
+            .slide-header {
+                padding: 20px;
+            }
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--ice), var(--coral));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--blue);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--blue);
+        }
+
+        .timeline-item.warn::before {
+            background: var(--coral);
+            box-shadow: 0 0 0 2px var(--coral);
+        }
+
+        .timeline-item h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .timeline-item p {
+            font-size: 12px;
+            color: var(--text-mid);
+            margin-top: 3px;
+            line-height: 1.5;
+        }
+
+        /* HIGHLIGHT NUMBER */
+        .big-num {
+            font-size: 40px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .big-num.red {
+            color: var(--coral);
+        }
+
+        .big-num.blue {
+            color: var(--blue);
+        }
+
+        .big-num.green {
+            color: var(--green);
+        }
+
+        /* COMPARISON CARD */
+        .compare-card {
+            border-radius: 14px;
+            padding: 20px;
+            border: 2px solid var(--border);
+        }
+
+        .compare-card.before {
+            border-color: #90CAF9;
+            background: #E3F2FD;
+        }
+
+        .compare-card.after {
+            border-color: #EF9A9A;
+            background: #FFEBEE;
+        }
+
+        .compare-card .card-period {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .compare-card.before .card-period {
+            color: var(--blue);
+        }
+
+        .compare-card.after .card-period {
+            color: var(--coral);
+        }
+
+        .compare-card .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .compare-card .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .compare-card .stat-name {
+            font-size: 12px;
+            color: var(--text-mid);
+        }
+
+        .compare-card .stat-val {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .compare-card.before .stat-val {
+            color: var(--blue);
+        }
+
+        .compare-card.after .stat-val {
+            color: var(--coral);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-deck">
+
+        <!-- HERO SLIDE -->
+        <div class="hero-slide">
+            <div class="hero-left">
+                <div class="hero-tag">🔍 광고 성과 분석 보고서</div>
+                <h1 class="hero-title">네이버 광고비 소진<br>이상 분석 <span>&amp; 원인 규명</span></h1>
+                <p class="hero-desc">광고비 충전 주기가 4~5일 → 3~4일로 단축된 원인을 데이터 기반으로 분석합니다. IP 차단 구조로 인한 입찰가 왜곡 문제를 심층 검토하였습니다.
+                </p>
+                <div class="hero-meta">
+                    <div class="hero-meta-item">
+                        <div class="label">비교 기간 A</div>
+                        <div class="value">6월 8일 ~ 11일</div>
+                    </div>
+                    <div class="hero-meta-item">
+                        <div class="label">비교 기간 B</div>
+                        <div class="value">6월 15일 ~ 18일</div>
+                    </div>
+                    <div class="hero-meta-item">
+                        <div class="label">기준 충전금액</div>
+                        <div class="value">약 100만원</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="alert-box">
+                    <div class="alert-icon">⚠️</div>
+                    <div class="alert-title">핵심 발견 사항</div>
+                    <div class="alert-text">경쟁사 IP 차단으로 실제 입찰 순위가 과소평가되어 CPC가 클릭당 <strong
+                            style="color:#FFB300;">1,000~3,000원</strong> 추가 발생</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 1: KPI 비교 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">1</div>
+                <div>
+                    <div class="slide-title">핵심 지표 비교 (기간 A vs B)</div>
+                    <div class="slide-subtitle">2026.06.08~11 / 2026.06.15~18 — 평일 기준 4일간 비교</div>
+                </div>
+            </div>
+            <div class="slide-body">
+                <div class="kpi-grid">
+                    <div class="kpi-card blue">
+                        <div class="kpi-label">총 광고비 (기간 A)</div>
+                        <div class="kpi-value">1,931,981</div>
+                        <div class="kpi-sub">원 / 4일</div>
+                        <div class="kpi-badge up">▲ +38.0% vs 이전</div>
+                    </div>
+                    <div class="kpi-card warn">
+                        <div class="kpi-label">총 광고비 (기간 B)</div>
+                        <div class="kpi-value">2,268,572</div>
+                        <div class="kpi-sub">원 / 4일</div>
+                        <div class="kpi-badge down">▲ +17.4% vs A</div>
+                    </div>
+                    <div class="kpi-card teal">
+                        <div class="kpi-label">평균 CPC (기간 A)</div>
+                        <div class="kpi-value">3,000원</div>
+                        <div class="kpi-sub">클릭당 비용</div>
+                        <div class="kpi-badge up">CTR 1.40%</div>
+                    </div>
+                    <div class="kpi-card green">
+                        <div class="kpi-label">평균 CPC (기간 B)</div>
+                        <div class="kpi-value">3,133원</div>
+                        <div class="kpi-sub">클릭당 비용</div>
+                        <div class="kpi-badge up">CTR 1.52%</div>
+                    </div>
+                </div>
+
+                <div class="two-col" style="margin-top: 24px;">
+                    <div class="chart-box">
+                        <h4>일자별 광고비 비교</h4>
+                        <p>기간 A(파랑) vs 기간 B(주황) — 단위: 만원</p>
+                        <canvas id="dailyChart" height="180"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h4>총 클릭수 비교</h4>
+                        <p>기간 A: 644클릭 / 기간 B: 724클릭</p>
+                        <canvas id="clickChart" height="180"></canvas>
+                    </div>
+                </div>
+
+                <div class="insight-box warn" style="margin-top: 20px;">
+                    <div class="insight-title">📌 핵심 변화</div>
+                    <p>기간 B(15~18일)에서 광고비가 기간 A 대비 <strong>약 33.6만원 증가</strong>하였으며, CPC도 133원 상승하였습니다. 동일한 100만원 충전
+                        기준으로 소진 주기가
+                        짧아진 핵심 원인은 실질 CPC 상승에 있습니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: 원인 분석 — IP 차단 구조 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">2</div>
+                <div>
+                    <div class="slide-title">근본 원인 분석 — IP 차단으로 인한 입찰가 왜곡</div>
+                    <div class="slide-subtitle">인천 청라 지역 IP 기준 광고 순위 세팅 오류</div>
+                </div>
+            </div>
+            <div class="slide-body">
+                <div class="cause-grid">
+                    <div class="cause-item">
+                        <div class="cause-icon red">🚫</div>
+                        <div class="cause-content">
+                            <h4>경쟁사의 우리 IP 차단</h4>
+                            <p>이한씨앤씨(ehancnc.co.kr)와 컨스트렉션(blog.naver.com/rain7193)은 인천 청라 지역 IP를 광고 노출에서 차단해 두었습니다. 이로
+                                인해 당사 담당자가
+                                "실내건축면허" 등 주요 키워드를 검색할 때 두 업체의 광고가 노출되지 않았습니다.</p>
+                        </div>
+                    </div>
+                    <div class="cause-item">
+                        <div class="cause-icon orange">🔢</div>
+                        <div class="cause-content">
+                            <h4>가상 1위 착시 현상</h4>
+                            <p>담당자 화면에서는 디에이치·바로건설 광고가 1~2위로 표시되었으나, 실제 다른 지역 검색 결과에서는 이한, 컨스트렉션이 1~2위를 점유하고 있었습니다. 즉,
+                                우리 광고의 실제 순위는
+                                3~5위 수준이었습니다.</p>
+                        </div>
+                    </div>
+                    <div class="cause-item">
+                        <div class="cause-icon blue">💸</div>
+                        <div class="cause-content">
+                            <h4>입찰가 과소 설정</h4>
+                            <p>담당자 기준 1위를 유지하는 입찰가(약 8,000원)로 세팅되었지만, 실제 시장에서 2~3위를 유지하기 위해서는 <strong>10,000~13,000원
+                                    수준</strong>이
+                                필요했습니다. 결과적으로 입찰 경쟁에서 낮은 순위를 차지하면서도 더 높은 CPC를 지불하는 구조가 형성되었습니다.</p>
+                        </div>
+                    </div>
+                    <div class="cause-item">
+                        <div class="cause-icon green">📈</div>
+                        <div class="cause-content">
+                            <h4>실질 CPC 격차 발생</h4>
+                            <p>기존 계획 대비 클릭당 <strong>1,000~3,000원</strong>의 추가 비용이 발생하였으며, 이는 동일한 클릭 수 대비 광고비 소진을 빠르게
+                                가속시킨 직접 원인입니다.
+                                시간대별로도 경쟁 강도 차이로 인해 CPC 편차가 발생하였습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: 구조 시각화 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">3</div>
+                <div>
+                    <div class="slide-title">IP 차단 구조로 인한 광고 노출 왜곡 비교</div>
+                    <div class="slide-subtitle">동일 키워드 "실내건축면허" 기준 — 담당자 화면 vs 실제 시장</div>
+                </div>
+            </div>
+            <div class="slide-body">
+                <div class="two-col">
+                    <div>
+                        <div class="section-label">🖥️ 담당자 화면 (청라 IP)</div>
+                        <div class="compare-card before">
+                            <div class="card-period">⬅ 담당자가 본 광고 순위</div>
+                            <div class="stat-row"><span class="stat-name">1위</span><span class="stat-val">디에이치건설정보
+                                    (dhnco.co.kr)</span></div>
+                            <div class="stat-row"><span class="stat-name">2위</span><span class="stat-val">나우건설정보
+                                    (baromna.com)</span>
+                            </div>
+                            <div class="stat-row"><span class="stat-name">3위</span><span class="stat-val">명가엠앤에이</span>
+                            </div>
+                            <div class="stat-row"><span class="stat-name">4위</span><span
+                                    class="stat-val">c114.com</span></div>
+                            <div class="stat-row" style="opacity:0.4"><span class="stat-name">— 미노출 —</span><span
+                                    class="stat-val">이한씨앤씨 (차단)</span></div>
+                            <div class="stat-row" style="opacity:0.4"><span class="stat-name">— 미노출 —</span><span
+                                    class="stat-val">컨스트렉션 (차단)</span></div>
+                        </div>
+                        <div class="insight-box" style="margin-top:12px;">
+                            <div class="insight-title">세팅 기준</div>
+                            <p>1위 유지를 위한 입찰가 <strong>약 8,000원</strong>으로 설정</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-label">🌐 실제 시장 (타지역 IP)</div>
+                        <div class="compare-card after">
+                            <div class="card-period">➡ 실제 광고 노출 순위</div>
+                            <div class="stat-row"><span class="stat-name">1위</span><span class="stat-val"
+                                    style="color:#C62828;">이한씨앤씨
+                                    (강력 입찰)</span></div>
+                            <div class="stat-row"><span class="stat-name">2위</span><span class="stat-val"
+                                    style="color:#C62828;">컨스트렉션
+                                    (강력 입찰)</span></div>
+                            <div class="stat-row"><span class="stat-name">3위~4위</span><span class="stat-val">디에이치 /
+                                    나우건설정보 ←
+                                    실제위치</span>
+                            </div>
+                            <div class="stat-row"><span class="stat-name">5위</span><span
+                                    class="stat-val">c114.com</span>
+                            </div>
+                            <div class="stat-row"><span class="stat-name">6위</span><span class="stat-val">명가엠앤에이</span>
+                            </div>
+                            <div class="stat-row"><span class="stat-name">7위</span><span class="stat-val">다해건설정보</span>
+                            </div>
+                        </div>
+                        <div class="insight-box warn" style="margin-top:12px;">
+                            <div class="insight-title">실제 필요 입찰가</div>
+                            <p>2~3위 진입을 위해서는 <strong>10,000~13,000원</strong> 필요</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="cpc-compare">
+                    <h4>주요 키워드 입찰가 인식 오차 (기간 B 기준)</h4>
+                    <div class="cpc-row">
+                        <span class="cpc-label">실내건축면허</span>
+                        <div class="cpc-bar-wrap">
+                            <div class="cpc-bar" style="width:0%;background:var(--blue)" data-width="73%"></div>
+                        </div>
+                        <span class="cpc-val">세팅 8,000원</span>
+                    </div>
+                    <div class="cpc-row">
+                        <span class="cpc-label">실내건축면허 (실제)</span>
+                        <div class="cpc-bar-wrap">
+                            <div class="cpc-bar" style="width:0%;background:var(--coral)" data-width="100%"></div>
+                        </div>
+                        <span class="cpc-val">필요 11,000원</span>
+                    </div>
+                    <div class="cpc-row">
+                        <span class="cpc-label">실내건축공사업</span>
+                        <div class="cpc-bar-wrap">
+                            <div class="cpc-bar" style="width:0%;background:var(--blue)" data-width="79%"></div>
+                        </div>
+                        <span class="cpc-val">세팅 8,700원</span>
+                    </div>
+                    <div class="cpc-row">
+                        <span class="cpc-label">실내건축공사업 (실제)</span>
+                        <div class="cpc-bar-wrap">
+                            <div class="cpc-bar" style="width:0%;background:var(--coral)" data-width="100%"></div>
+                        </div>
+                        <span class="cpc-val">필요 11,000원</span>
+                    </div>
+                    <div class="cpc-row">
+                        <span class="cpc-label">건설면허양도양수</span>
+                        <div class="cpc-bar-wrap">
+                            <div class="cpc-bar" style="width:0%;background:var(--blue)" data-width="38%"></div>
+                        </div>
+                        <span class="cpc-val">세팅 4,000원</span>
+                    </div>
+                    <div class="cpc-row">
+                        <span class="cpc-label">건설면허양도양수 (실제)</span>
+                        <div class="cpc-bar-wrap">
+                            <div class="cpc-bar" style="width:0%;background:var(--coral)" data-width="64%"></div>
+                        </div>
+                        <span class="cpc-val">추정 7,000원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: 광고비 소진 추이 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">4</div>
+                <div>
+                    <div class="slide-title">캠페인별 광고비 소진 비교</div>
+                    <div class="slide-subtitle">디에이치 + 바로건설 / 파워링크 + 파워콘텐츠 통합 분석</div>
+                </div>
+            </div>
+            <div class="slide-body">
+                <div class="two-col">
+                    <div class="chart-box">
+                        <h4>캠페인타입별 광고비 (기간 A · B 비교)</h4>
+                        <p>파워링크 vs 파워콘텐츠 지출 비중 변화</p>
+                        <canvas id="typeChart" height="220"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h4>광고주별 광고비 분포</h4>
+                        <p>디에이치 vs 바로건설 — 기간 B 기준</p>
+                        <canvas id="advertiserChart" height="220"></canvas>
+                    </div>
+                </div>
+
+                <div class="three-col" style="margin-top: 20px;">
+                    <div style="text-align:center; background:var(--light-bg); border-radius:14px; padding:20px;">
+                        <div class="big-num blue">644</div>
+                        <div style="font-size:12px; color:var(--text-mid); margin-top:6px;">기간 A 총 클릭수</div>
+                        <div style="font-size:20px; font-weight:900; color:var(--blue); margin-top:8px;">1,931,981원
+                        </div>
+                        <div style="font-size:11px; color:var(--text-light);">총 광고비</div>
+                    </div>
+                    <div style="text-align:center; background:var(--light-bg); border-radius:14px; padding:20px;">
+                        <div style="font-size:32px; font-weight:900; color:var(--warn);">→</div>
+                        <div style="font-size:14px; font-weight:700; color:var(--coral); margin-top:6px;">CPC +133원 ↑
+                        </div>
+                        <div style="font-size:13px; color:var(--text-mid); margin-top:6px;">광고비 +336,591원 ↑</div>
+                        <div style="font-size:12px; color:var(--coral); margin-top:6px;">소진 주기 약 1일 단축</div>
+                    </div>
+                    <div style="text-align:center; background:var(--light-bg); border-radius:14px; padding:20px;">
+                        <div class="big-num red">724</div>
+                        <div style="font-size:12px; color:var(--text-mid); margin-top:6px;">기간 B 총 클릭수</div>
+                        <div style="font-size:20px; font-weight:900; color:var(--coral); margin-top:8px;">2,268,572원
+                        </div>
+                        <div style="font-size:11px; color:var(--text-light);">총 광고비</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: 상위 클릭 키워드 분석 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">5</div>
+                <div>
+                    <div class="slide-title">주요 키워드 성과 분석</div>
+                    <div class="slide-subtitle">파워링크 + 파워콘텐츠 클릭 TOP 키워드 비교</div>
+                </div>
+            </div>
+            <div class="slide-body">
+                <div class="two-col">
+                    <div>
+                        <div class="section-label">📋 기간 A (6/8~11) 클릭 TOP 키워드</div>
+                        <div class="chart-box">
+                            <canvas id="kwChartA" height="260"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-label">📋 기간 B (6/15~18) 클릭 TOP 키워드</div>
+                        <div class="chart-box">
+                            <canvas id="kwChartB" height="260"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box" style="margin-top: 20px;">
+                    <div class="insight-title">💡 키워드 패턴 변화</div>
+                    <p>기간 B에서 <strong>실내건축면허, 종합건설면허</strong> 키워드의 클릭 단가가 기간 A 대비 상승하였으며, <strong>기업진단 관련 키워드</strong>의
+                        클릭 비중도
+                        증가하였습니다. 두 기간 모두 실내건축 관련 키워드가 전체 클릭의 핵심을 차지하고 있습니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: 개선 방안 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">6</div>
+                <div>
+                    <div class="slide-title">개선 방안 및 조치 계획</div>
+                    <div class="slide-subtitle">IP 차단 문제 해소 및 입찰가 재정비</div>
+                </div>
+            </div>
+            <div class="slide-body">
+                <table class="action-table">
+                    <thead>
+                        <tr>
+                            <th>우선순위</th>
+                            <th>조치 항목</th>
+                            <th>상세 내용</th>
+                            <th>기대 효과</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="priority-badge high">긴급</span></td>
+                            <td><strong>VPN 활용 순위 검증</strong></td>
+                            <td>주요 키워드(실내건축면허, 종합건설면허, 기업진단 등)를 타지역 IP로 정기적으로 모니터링하여 실제 노출 순위 확인</td>
+                            <td>실제 경쟁 환경 파악 → 정확한 입찰가 설정</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge high">긴급</span></td>
+                            <td><strong>주요 키워드 입찰가 재조정</strong></td>
+                            <td>실내건축면허 8,000원 → 11,000~13,000원으로 상향 조정 (2~3위 진입 목표)</td>
+                            <td>실제 2~3위 유지 → 클릭률 개선 기대</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge mid">중요</span></td>
+                            <td><strong>시간대별 입찰 조정</strong></td>
+                            <td>경쟁이 강한 오전 9~11시, 오후 2~4시대 입찰가 별도 세팅 또는 자동 입찰 전략 도입 검토</td>
+                            <td>CPC 안정화 및 불필요한 고가 클릭 방지</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge mid">중요</span></td>
+                            <td><strong>광고비 일일 한도 재설정</strong></td>
+                            <td>현재 무제한(또는 높은 한도) → 일별 한도 설정으로 소진 속도 관리</td>
+                            <td>월 예산 예측 가능성 향상</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge low">권고</span></td>
+                            <td><strong>경쟁사 IP 차단 역활용</strong></td>
+                            <td>경쟁사가 우리 IP를 차단했으므로, 동일하게 당사도 주요 경쟁사 IP 대역 차단 여부 검토</td>
+                            <td>불필요한 경쟁사 클릭 방지</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge low">권고</span></td>
+                            <td><strong>정기 리포트 체계 수립</strong></td>
+                            <td>주 1회 타지역 IP 기준 순위 스크린샷 비교 리포트 운영. 이번 사례 재발 방지 프로세스 수립</td>
+                            <td>광고 운영 투명성 및 정확도 향상</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="two-col" style="margin-top: 20px;">
+                    <div class="insight-box warn">
+                        <div class="insight-title">⚠️ 이번 문제의 본질</div>
+                        <p>광고 세팅 담당자의 검색 환경(청라 지역 IP)에서 경쟁사 광고가 차단되어 있어 <strong>실제 경쟁 강도를 크게 낮게 인식</strong>한 것이 근본
+                            원인입니다. 이는 단순 실수가
+                            아닌, 경쟁사들이 의도적으로 설계한 구조임을 인지해야 합니다.</p>
+                    </div>
+                    <div class="insight-box success">
+                        <div class="insight-title">✅ 조기 발견의 의의</div>
+                        <p>VPN 활용 비교 검색을 통해 이 문제를 확인한 것은 매우 중요한 성과입니다. 향후 동일한 방법으로 <strong>최소 월 2회</strong> 순위 점검을 통해
+                            입찰가 최적화 및 광고비
+                            효율을 관리할 것을 권장합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: 타임라인 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-num">7</div>
+                <div>
+                    <div class="slide-title">문제 발생 타임라인 요약</div>
+                    <div class="slide-subtitle">광고 집행 → 이상 감지 → 원인 분석 → 개선</div>
+                </div>
+            </div>
+            <div class="slide-body">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>광고 세팅 초기</h4>
+                        <p>청라 IP 환경에서 경쟁사(이한, 컨스트렉션) 광고가 차단되어 보이지 않음. 담당자 화면 기준 1위 유지를 위한 입찰가(~8,000원)로 세팅 완료.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>6월 8일~11일 (기간 A)</h4>
+                        <p>총 광고비 1,931,981원, 평균 CPC 3,000원. 충전 주기 약 4~5일 수준 유지. 표면상 정상 운영으로 인식.</p>
+                    </div>
+                    <div class="timeline-item warn">
+                        <h4>이상 징후 감지</h4>
+                        <p>광고비 소진 주기가 기존 4~5일 → 3~4일로 단축되는 현상 발견. 동일 예산 대비 클릭수 및 광고비 비례가 맞지 않는 현상 인지.</p>
+                    </div>
+                    <div class="timeline-item warn">
+                        <h4>6월 15일~18일 (기간 B)</h4>
+                        <p>총 광고비 2,268,572원, 평균 CPC 3,133원으로 상승. 타지역 IP 확인 결과 경쟁사(이한, 컨스트렉션)가 실제 1~2위를 점유하고 있음을 확인.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>원인 규명</h4>
+                        <p>경쟁사들이 청라 IP를 차단하여 담당자 환경에서는 보이지 않았던 것으로 분석. 실제 2~3위 유지를 위해서는 10,000~13,000원 입찰가 필요한 시장임을 확인.
+                        </p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>개선 조치 계획 수립</h4>
+                        <p>VPN 기반 정기 순위 모니터링 체계 도입, 주요 키워드 입찰가 상향 조정, 일일 예산 한도 세팅 등 후속 조치 실행 예정.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-footer">
+            📊 네이버 광고 성과 분석 보고서 · 비교기간: 2026.06.08~11 / 2026.06.15~18 · 평일 기준 4일 비교 분석
+        </div>
+    </div>
+
+    <script>
+        // ─── CHART DEFAULTS ───────────────────────────────────
+        Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+        Chart.defaults.font.size = 12;
+        Chart.defaults.color = '#4A5568';
+
+        // ─── DAILY COST CHART ─────────────────────────────────
+        const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+        new Chart(dailyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['1일차', '2일차', '3일차', '4일차'],
+                datasets: [
+                    {
+                        label: '기간 A (6/8~11)',
+                        data: [62, 15.5, 18, 58],
+                        backgroundColor: 'rgba(21,101,192,0.7)',
+                        borderRadius: 6,
+                    },
+                    {
+                        label: '기간 B (6/15~18)',
+                        data: [54, 55, 54, 52],
+                        backgroundColor: 'rgba(255,87,34,0.7)',
+                        borderRadius: 6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                animation: { duration: 1200, easing: 'easeOutQuart' },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '만원' }
+                    }
+                },
+                scales: {
+                    y: { ticks: { callback: v => v + '만' }, grid: { color: '#F0F4F8' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // ─── CLICK CHART ──────────────────────────────────────
+        const clickCtx = document.getElementById('clickChart').getContext('2d');
+        new Chart(clickCtx, {
+            type: 'line',
+            data: {
+                labels: ['1일차', '2일차', '3일차', '4일차'],
+                datasets: [
+                    {
+                        label: '기간 A 클릭수',
+                        data: [200, 52, 188, 204],
+                        borderColor: '#1565C0',
+                        backgroundColor: 'rgba(21,101,192,0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#1565C0',
+                        pointRadius: 5,
+                    },
+                    {
+                        label: '기간 B 클릭수',
+                        data: [183, 186, 177, 178],
+                        borderColor: '#FF5722',
+                        backgroundColor: 'rgba(255,87,34,0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#FF5722',
+                        pointRadius: 5,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                animation: { duration: 1400, easing: 'easeOutCubic' },
+                plugins: { legend: { position: 'top' } },
+                scales: {
+                    y: { grid: { color: '#F0F4F8' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // ─── TYPE CHART ───────────────────────────────────────
+        const typeCtx = document.getElementById('typeChart').getContext('2d');
+        new Chart(typeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['파워링크', '파워콘텐츠'],
+                datasets: [
+                    {
+                        label: '기간 A',
+                        data: [421969, 1510012],
+                        backgroundColor: 'rgba(21,101,192,0.75)',
+                        borderRadius: 8,
+                    },
+                    {
+                        label: '기간 B',
+                        data: [468173, 1800399],
+                        backgroundColor: 'rgba(255,87,34,0.75)',
+                        borderRadius: 8,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                animation: { duration: 1200, easing: 'easeOutQuart' },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString() + '원' } }
+                },
+                scales: {
+                    y: { ticks: { callback: v => (v / 10000).toFixed(0) + '만' }, grid: { color: '#F0F4F8' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // ─── ADVERTISER CHART ─────────────────────────────────
+        const advCtx = document.getElementById('advertiserChart').getContext('2d');
+        new Chart(advCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['디에이치', '바로건설'],
+                datasets: [{
+                    data: [1059572, 1209000],
+                    backgroundColor: ['#1565C0', '#FF5722'],
+                    hoverOffset: 12,
+                    borderWidth: 3,
+                    borderColor: '#fff',
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: { duration: 1400, easing: 'easeOutBack' },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed.toLocaleString() + '원' } }
+                },
+                cutout: '62%',
+            }
+        });
+
+        // ─── KW CHART A ───────────────────────────────────────
+        const kwACtx = document.getElementById('kwChartA').getContext('2d');
+        new Chart(kwACtx, {
+            type: 'bar',
+            indexAxis: 'y',
+            data: {
+                labels: ['실내건축면허', '종합건설면허', '건설면허양도양수', '전문건설업면허', '실내건축공사업', '건설면허취득', '건설업면허', '종합건설면허→', '기업진단보고서', '기계설비면허'],
+                datasets: [{
+                    label: '클릭수 (기간 A)',
+                    data: [54, 29, 9, 16, 8, 8, 8, 5, 9, 7],
+                    backgroundColor: 'rgba(21,101,192,0.7)',
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: { duration: 1000, easing: 'easeOutQuart' },
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#F0F4F8' } },
+                    y: { ticks: { font: { size: 11 } }, grid: { display: false } }
+                }
+            }
+        });
+
+        // ─── KW CHART B ───────────────────────────────────────
+        const kwBCtx = document.getElementById('kwChartB').getContext('2d');
+        new Chart(kwBCtx, {
+            type: 'bar',
+            indexAxis: 'y',
+            data: {
+                labels: ['실내건축면허', '종합건설면허', '실내건축공사업면허', '전문건설업면허', '기업진단', '기업진단보고서', '건설면허', '건설업면허', '건설면허취득', '정보통신공사업'],
+                datasets: [{
+                    label: '클릭수 (기간 B)',
+                    data: [83, 40, 28, 34, 21, 25, 6, 8, 8, 30],
+                    backgroundColor: 'rgba(255,87,34,0.7)',
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: { duration: 1000, easing: 'easeOutQuart' },
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#F0F4F8' } },
+                    y: { ticks: { font: { size: 11 } }, grid: { display: false } }
+                }
+            }
+        });
+
+        // ─── BAR ANIMATION ────────────────────────────────────
+        function animateBars() {
+            document.querySelectorAll('.cpc-bar[data-width]').forEach(bar => {
+                setTimeout(() => {
+                    bar.style.width = bar.dataset.width;
+                }, 400);
+            });
+        }
+        if ('IntersectionObserver' in window) {
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting) { animateBars(); obs.unobserve(e.target); } });
+            }, { threshold: 0.3 });
+            document.querySelectorAll('.cpc-compare').forEach(el => obs.observe(el));
+        } else {
+            animateBars();
+        }
+    </script>
+</body>
+
+</html>
